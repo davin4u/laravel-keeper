@@ -17,4 +17,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+
+Route::group(['before' => 'auth'], function() {
+    Route::get('/home', 'HomeController@index');
+
+    //Projects
+    Route::get('/projects', 'ProjectsController@index');
+    Route::get('/projects/new', 'ProjectsController@create');
+    Route::post('/projects/new', 'ProjectsController@store');
+    Route::get('/projects/edit/{id}', 'ProjectsController@edit');
+    Route::get('/projects/delete/{id}', 'ProjectsController@delete');
+});
