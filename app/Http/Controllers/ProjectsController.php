@@ -37,8 +37,8 @@ class ProjectsController extends Controller
     public function store()
     {
         $this->validate(request(), [
-            'name' => 'required|max:255',
-            'url' => 'url|max:255'
+            'name' => 'required|max:190',
+            'url' => 'url|max:190'
         ]);
 
         $this->projects->create(request(['name', 'url', 'short_description', 'full_description']));

@@ -13,16 +13,20 @@ class ProjectsRepository
 
     public function all()
     {
-        return Project::all();
+        return Project::where('user_id', auth()->user()->id)->get();
     }
 
     public function getById($id)
     {
-        return Project::find($id);
+        return Project::where('user_id', auth()->user()->id)
+                ->where('id', $id)
+                ->first();
     }
 
     public function delete($id)
     {
-        Project::delete($id);
+        return Project::where('user_id', auth()->user()->id)
+                ->where('id', $id)
+                ->delete();
     }
 }

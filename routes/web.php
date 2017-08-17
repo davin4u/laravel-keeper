@@ -27,4 +27,11 @@ Route::group(['before' => 'auth'], function() {
     Route::post('/projects/new', 'ProjectsController@store');
     Route::get('/projects/edit/{id}', 'ProjectsController@edit');
     Route::get('/projects/delete/{id}', 'ProjectsController@delete');
+
+    //Passwords
+    Route::get('/passwords', 'PasswordsController@index');
+    Route::get('/passwords/new', 'PasswordsController@create');
+    Route::post('/passwords/new', 'PasswordsController@store');
+    Route::get('/passwords/edit/{id}', 'PasswordsController@edit');
+    Route::get('/passwords/delete/{id}', 'PasswordsController@delete');
 });
