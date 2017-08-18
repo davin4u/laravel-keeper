@@ -5,7 +5,7 @@
     <div class="page-title">
         <div class="">
             <h3>
-                <a class="btn btn-sm btn-primary" href="/projects"><i class="fa fa-reply"></i> Projects</a>
+                <a class="btn btn-sm btn-primary" href="{{ action('ProjectsController@index') }}"><i class="fa fa-reply"></i> Projects</a>
                 {{ $project->name }}
             </h3>
         </div>
@@ -19,7 +19,7 @@
                             {{ $error }}
                         </div>
                         @endforeach
-                        <form class="form-horizontal form-label-left input_mask" method="POST" action="{{ action('ProjectsController@store') }}">
+                        <form class="form-horizontal form-label-left input_mask" method="POST" action="{{ action('ProjectsController@update', [$project->id]) }}">
                             {{ csrf_field() }}
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
                                 <input value="{{ $project->name }}" type="text" name="name" class="form-control has-feedback-left" id="inputSuccess1" placeholder="Project Name" />

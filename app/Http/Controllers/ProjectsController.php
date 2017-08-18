@@ -36,12 +36,12 @@ class ProjectsController extends Controller
 
     public function store()
     {
-        $this->validate(request(), [
-            'name' => 'required|max:190',
-            'url' => 'url|max:190'
-        ]);
-
-        $this->projects->create(request(['name', 'url', 'short_description', 'full_description']));
+        $this->projects->create(request([
+            'name',
+            'url',
+            'short_description',
+            'full_description'
+        ]));
 
         return redirect('projects');
     }
@@ -57,4 +57,17 @@ class ProjectsController extends Controller
 
         return redirect('projects');
     }
+
+    public function update($id)
+    {
+        $this->projects->update($id, request([
+            'name',
+            'url',
+            'short_description',
+            'full_description'
+        ]));
+
+        return redirect('projects');
+    }
+
 }

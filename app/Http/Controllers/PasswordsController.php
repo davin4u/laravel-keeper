@@ -37,13 +37,6 @@ class PasswordsController extends Controller
 
     public function store()
     {
-        $this->validate(request(), [
-            'name' => 'required|max:190',
-            'project_id' => 'required',
-            'username' => 'max:190',
-            'password' => 'max:190'
-        ]);
-
         $this->passwords->create(request([
             'project_id',
             'type',
@@ -52,6 +45,35 @@ class PasswordsController extends Controller
             'password',
             'full_description'
         ]));
+
+        return redirect('passwords');
+    }
+
+    public function edit($id)
+    {
+        return view('passwords.edit', [
+            'projects' => $this->projects->all(),
+            'password' => $this->passwords->getById($id)
+        ]);
+    }
+
+    public function update($id)
+    {
+        $this->passwords->update($id, request([
+            'project_id',
+            'type',
+            'name',
+            'username',
+            'password',
+            'full_description'
+        ]));
+
+        return redirect('passwords');
+    }
+
+    public function delete($id)
+    {
+        $this->passwords->delete($id);
 
         return redirect('passwords');
     }

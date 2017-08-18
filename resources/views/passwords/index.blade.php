@@ -5,7 +5,7 @@
     <div class="page-title">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <h3>Projects <a class="btn btn-primary pull-right" href="{{ action('PasswordsController@create') }}">Add password</a></h3>
+                <h3>Passwords <a class="btn btn-primary pull-right" href="{{ action('PasswordsController@create') }}">Add password</a></h3>
                 <div class="clearfix"></div>
             </div>
         </div>
