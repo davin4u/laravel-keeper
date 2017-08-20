@@ -27,7 +27,7 @@
                             
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
                                 <select class="form-control has-feedback-left" name="project_id">
-                                    @foreach($projects as $project)
+                                    @foreach ($projects as $project)
                                     <option value="{{ $project->id }}"
                                             @if($project->id == $password->project_id)
                                             selected = "selected"
@@ -40,9 +40,13 @@
 
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
                                 <select class="form-control has-feedback-left" name="type">
-                                    <option value="1">Admin Panel</option>
-                                    <option value="2">FTP</option>
-                                    <option value="3">SSH</option>
+                                    @foreach ($password_types as $type)
+                                        <option value="{{ $type->id }}"
+                                                @if($password->type == $type->id)
+                                                selected = "selected"
+                                                @endif
+                                                >{{ $type->name }}</option>
+                                    @endforeach
                                 </select>
                                 <span class="fa fa-tag form-control-feedback left" aria-hidden="true"></span>
                             </div>

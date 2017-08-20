@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Project;
+use App\PasswordType;
 
 class Password extends Model
 {
@@ -25,6 +26,11 @@ class Password extends Model
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function passwordType()
+    {
+        return $this->belongsTo(PasswordType::class, 'type', 'id');
     }
 
     public function getDecryptedPasswordAttribute()

@@ -25,7 +25,7 @@
                             <tbody>
                                 @foreach($passwords as $password)
                                 <tr>
-                                    <td>-</td>
+                                    <td>{{ $password->passwordType->name }}</td>
                                     <td>{{ $password->project->name }}</td>
                                     <td>
                                         <a href="{{ action('PasswordsController@edit', [$password->id]) }}">{{ $password->name }}</a>
