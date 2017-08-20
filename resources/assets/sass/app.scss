@@ -7,3 +7,20 @@
 
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+.password-group{
+    position: relative;
+
+    .show-password-btn{
+        position: absolute;
+        right: 10px;
+        top: 3px;
+    }
+}
+
+.registration_form{
+    opacity: 1;
+}
+.site_title{
+    font-size: 13px;
+}

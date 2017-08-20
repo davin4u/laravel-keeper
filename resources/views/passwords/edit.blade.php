@@ -57,8 +57,9 @@
                                 <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
                             </div>
 
-                            <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-                                <input value="{{ $password->password }}" type="password" name="password" class="form-control has-feedback-left" id="inputSuccess3" placeholder="Password" />
+                            <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback password-group">
+                                <button class="btn btn-primary btn-small show-password-btn"><span class="fa fa-eye"></span></button>
+                                <input value="{{ $password->decrypted_password }}" type="password" name="password" class="form-control has-feedback-left" id="inputSuccess3" placeholder="Password" />
                                 <span class="fa fa-credit-card form-control-feedback left" aria-hidden="true"></span>
                             </div>
 

@@ -18,9 +18,9 @@ class CreatePasswordsTable extends Migration
             $table->integer('user_id');
             $table->integer('project_id');
             $table->tinyInteger('type');
-            $table->string('name');
-            $table->string('username');
-            $table->string('password');
+            $table->string('name', 255);
+            $table->string('username', 255);
+            $table->string('password', 255);
             $table->text('full_description')->nullable();
             $table->timestamps();
         });

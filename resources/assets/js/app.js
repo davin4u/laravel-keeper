@@ -7,14 +7,16 @@
 
 require('./bootstrap');
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-Vue.component('example', require('./components/Example.vue'));
-
-const app = new Vue({
-    el: '#app'
+$(document).ready(function(){
+    $(".show-password-btn").on("click", function(){
+        if ($(".show-password-btn").hasClass("shown")) {
+            $(this).closest(".password-group").find("input").attr("type", "password");
+            $(".show-password-btn").removeClass("shown");
+        }
+        else {
+            $(this).closest(".password-group").find("input").attr("type", "text");
+            $(".show-password-btn").addClass("shown");
+        }
+        return false;
+    });
 });

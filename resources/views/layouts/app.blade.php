@@ -28,11 +28,10 @@
     <link href="/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
+    <link href="/css/app.css" rel="stylesheet">
+
     <!-- Custom Theme Style -->
     <link href="/css/custom.min.css" rel="stylesheet">
-
-    <!-- Styles -->
-    <link href="/css/styles.css" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -139,6 +138,8 @@
     <script src="/js/app.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="/js/custom.min.js"></script>
+
+    @yield('scripts')
 
 </body>
 </html>
