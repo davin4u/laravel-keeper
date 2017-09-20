@@ -26,7 +26,7 @@
                                 @foreach($projects as $project)
                                 <tr>
                                     <td>
-                                        <a href="{{ action('ProjectsController@edit', [$project->id]) }}">{{ $project->name }}</a>
+                                        <a href="{{ action('PasswordsController@projectPasswordsList', [$project->id]) }}">{{ $project->name }}</a>
                                         <br />
                                         <small>Created at {{ $project->created_at }}</small>
                                     </td>

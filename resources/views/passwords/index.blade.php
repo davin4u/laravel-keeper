@@ -5,7 +5,12 @@
     <div class="page-title">
         <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <h3>Passwords <a class="btn btn-primary pull-right" href="{{ action('PasswordsController@create') }}">Add password</a></h3>
+                <h3>
+                  @if (isset($project))
+                  {{ $project->name }} |
+                  @endif
+                  Passwords <a class="btn btn-primary pull-right" href="{{ action('PasswordsController@create') }}">Add password</a>
+                </h3>
                 <div class="clearfix"></div>
             </div>
         </div>
@@ -16,16 +21,16 @@
                         <table id="projects-table" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th style="width: 20%;">Type</th>
-                                    <th style="width: 20%;">Project</th>
-                                    <th style="width: 20%;">Name</th>
-                                    <th style="width: 20%;"></th>
+                                    <th style="width: 10%;">Type</th>
+                                    <th style="width: 15%;">Project</th>
+                                    <th style="width: 50%;">Name</th>
+                                    <th style="width: 15%;"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($passwords as $password)
                                 <tr>
-                                    <td>{{ $password->passwordType->name }}</td>
+                                    <td><i class="fa {{ $password->passwordType->icon }}"></i> {{ $password->passwordType->name }}</td>
                                     <td>{{ $password->project->name }}</td>
                                     <td>
                                         <a href="{{ action('PasswordsController@edit', [$password->id]) }}">{{ $password->name }}</a>
@@ -46,4 +51,12 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function(){
+            $("#projects-table").DataTable();
+        });
+    </script>
 @endsection

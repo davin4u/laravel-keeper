@@ -29,6 +29,14 @@ class PasswordsController extends Controller
         ]);
     }
 
+    public function projectPasswordsList(Project $project)
+    {
+        return view('passwords.index', [
+            'passwords' => $project->passwords()->get(),
+            'project' => $project
+        ]);
+    }
+
     public function create()
     {
         return view('passwords.create', [
