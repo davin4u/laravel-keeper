@@ -24,7 +24,7 @@
                         <form class="form-horizontal form-label-left input_mask" method="POST" action="{{ action('PasswordsController@update', [$password->id]) }}">
 
                             {{ csrf_field() }}
-                            
+
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
                                 <select class="form-control has-feedback-left" name="project_id">
                                     @foreach ($projects as $project)
@@ -73,6 +73,20 @@
                             </div>
 
                             <div class="clearfix"></div>
+                            <div class="ln_solid"></div>
+
+                            <h2>Share password with users:</h2>
+
+                            <div class="well share-with-block">
+                                <ul class="share-with-users">
+                                    @foreach ($users as $user)
+                                        <li>
+                                            <input type="checkbox" <?php if ($password->isSharedWithUser($user->id)) echo 'checked="checked"'; ?> name="share_with[]" value="{{ $user->id }}" class="flat" /> {{ $user->name }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+
                             <div class="ln_solid"></div>
 
                             <div class="form-group">

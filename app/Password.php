@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+
+use App\User;
 use App\Project;
 use App\PasswordType;
 
@@ -36,6 +38,16 @@ class Password extends Model
     public function getDecryptedPasswordAttribute()
     {
         return decrypt($this->password);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    public function isSharedWithUser($userId)
+    {
+        return $this->users()->wherePivot('user_id', $userId)->count() > 0 ? true : false;
     }
 
 }
