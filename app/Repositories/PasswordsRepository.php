@@ -18,14 +18,12 @@ class PasswordsRepository
 
     public function all()
     {
-        return Password::where('user_id', auth()->user()->id)->get();
+        return auth()->user()->passwords()->get();
     }
 
     public function getById($id)
     {
-        return Password::where('user_id', auth()->user()->id)
-                ->where('id', $id)
-                ->first();
+        return auth()->user()->passwords()->wherePivot('password_id', $id)->first();
     }
 
     /**
@@ -37,7 +35,11 @@ class PasswordsRepository
     {
         $this->validator->validate($data);
 
-        return Password::create(array_merge($data, ['user_id' => auth()->user()->id]));
+        $password = Password::create(array_merge($data, ['user_id' => auth()->user()->id]));
+
+        auth()->user()->passwords()->attach($password->id);
+
+        return $password;
     }
 
     public function delete($id)
@@ -49,11 +51,54 @@ class PasswordsRepository
 
     public function update($id, $data = [])
     {
+        $shareWith = [];
+
+        if (isset($data['share_with'])) {
+            $shareWith = $data['share_with'];
+            unset($data['share_with']);
+        }
+
         $this->validator->validate($data);
 
-        return Password::where('user_id', auth()->user()->id)
+        $update = Password::where('user_id', auth()->user()->id)
                 ->where('id', $id)
                 ->first()
                 ->update($data);
+
+        if ($update) {
+            $this->sharePasswordWithUsers($id, $shareWith, true);
+        }
+
+        return $update;
+    }
+
+    public function getProjectPasswords($projectId)
+    {
+        $passwordsIds = auth()->user()->passwords()->pluck('password_id')->toArray();
+
+        if (!empty($passwordsIds)) {
+            return Password::where('project_id', $projectId)
+                    ->whereIn('id', $passwordsIds)->get();
+        }
+
+        return [];
+    }
+
+    public function sharePasswordWithUsers($passwordId, $shareWith = [], $sync = false)
+    {
+        $password = $this->getById($passwordId);
+
+        if ($password) {
+            if (!in_array($password->user_id, $shareWith)) {
+                $shareWith[] = $password->user_id;
+            }
+
+            if ($sync) {
+                $password->users()->sync($shareWith);
+            }
+            else {
+                $password->users()->attach($shareWith);
+            }
+        }
     }
 }

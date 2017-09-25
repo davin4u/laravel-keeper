@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Project;
 use App\Password;
 use App\PasswordType;
+use App\User;
 
 use App\Repositories\PasswordsRepository;
 use App\Repositories\ProjectsRepository;
@@ -32,7 +33,7 @@ class PasswordsController extends Controller
     public function projectPasswordsList(Project $project)
     {
         return view('passwords.index', [
-            'passwords' => $project->passwords()->get(),
+            'passwords' => $this->passwords->getProjectPasswords($project->id),
             'project' => $project
         ]);
     }
@@ -64,7 +65,8 @@ class PasswordsController extends Controller
         return view('passwords.edit', [
             'projects' => $this->projects->all(),
             'password' => $this->passwords->getById($id),
-            'password_types' => PasswordType::all()
+            'password_types' => PasswordType::all(),
+            'users' => User::where('id', '<>', auth()->user()->id)->get()
         ]);
     }
 
@@ -76,7 +78,8 @@ class PasswordsController extends Controller
             'name',
             'username',
             'password',
-            'full_description'
+            'full_description',
+            'share_with'
         ]));
 
         return redirect('passwords');

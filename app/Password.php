@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+
+use App\User;
 use App\Project;
 use App\PasswordType;
 
@@ -47,6 +49,16 @@ class Password extends Model
         }
 
         return $rowsCount > $max ? $max : $rowsCount;
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    public function isSharedWithUser($userId)
+    {
+        return $this->users()->wherePivot('user_id', $userId)->count() > 0 ? true : false;
     }
 
 }

@@ -8,7 +8,7 @@
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
-.password-group{
+.password-group {
     position: relative;
 
     .show-password-btn{
@@ -18,9 +18,16 @@
     }
 }
 
-.registration_form{
+.registration_form {
     opacity: 1;
 }
-.site_title{
+.site_title {
     font-size: 13px;
+}
+
+.share-with-block {
+    .share-with-users {
+        list-style: none;
+        padding: 0px;
+    }
 }
