@@ -24,7 +24,7 @@
                         <form class="form-horizontal form-label-left input_mask" method="POST" action="{{ action('PasswordsController@update', [$password->id]) }}">
 
                             {{ csrf_field() }}
-                            
+
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
                                 <select class="form-control has-feedback-left" name="project_id">
                                     @foreach ($projects as $project)
@@ -68,7 +68,7 @@
                             </div>
 
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
-                                <textarea name="full_description" class="form-control has-feedback-left" rows="4" id="inputSuccess4" placeholder="Full Description">{{ $password->full_description }}</textarea>
+                                <textarea name="full_description" class="form-control has-feedback-left" rows="{{ $password->getDescriptionRowsCount(20) }}" id="inputSuccess4" placeholder="Full Description">{{ $password->full_description }}</textarea>
                                 <span class="fa fa-align-justify form-control-feedback left" aria-hidden="true"></span>
                             </div>
 

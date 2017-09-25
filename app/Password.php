@@ -38,4 +38,15 @@ class Password extends Model
         return decrypt($this->password);
     }
 
+    public function getDescriptionRowsCount($max = 20, $min = 10)
+    {
+        $rowsCount = count(explode("\n", $this->full_description));
+
+        if ($rowsCount < $min) {
+            $rowsCount = $min;
+        }
+
+        return $rowsCount > $max ? $max : $rowsCount;
+    }
+
 }
