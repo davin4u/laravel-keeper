@@ -19,6 +19,8 @@ class PasswordsController extends Controller
 
     public function __construct(ProjectsRepository $projects, PasswordsRepository $passwords)
     {
+        $this->middleware('auth');
+
         $this->projects = $projects;
         $this->passwords = $passwords;
     }
@@ -62,11 +64,13 @@ class PasswordsController extends Controller
 
     public function edit($id)
     {
+        $password = $this->passwords->getById($id);
+
         return view('passwords.edit', [
             'projects' => $this->projects->all(),
-            'password' => $this->passwords->getById($id),
+            'password' => $password,
             'password_types' => PasswordType::all(),
-            'users' => User::where('id', '<>', auth()->user()->id)->get()
+            'users' => $password->user_id == auth()->user()->id ? User::where('id', '<>', auth()->user()->id)->get() : []
         ]);
     }
 

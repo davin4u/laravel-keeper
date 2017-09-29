@@ -39,7 +39,9 @@
                                     </td>
                                     <td>
                                         <a href="{{ action('PasswordsController@edit', [$password->id]) }}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
+                                        @if ($password->removable())
                                         <a href="{{ action('PasswordsController@delete', [$password->id]) }}" class="btn btn-danger btn-xs" onclick="if(!confirm('Are you sure?'){return false;});"><i class="fa fa-trash-o"></i> Delete </a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach

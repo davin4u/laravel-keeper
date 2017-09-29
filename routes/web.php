@@ -15,6 +15,12 @@ Route::get('/', function(){
     return redirect('/login');
 });
 
+Route::get('/logout', function(){
+    auth()->logout();
+
+    return redirect('/login');
+});
+
 Auth::routes();
 
 Route::group(['before' => 'auth'], function() {

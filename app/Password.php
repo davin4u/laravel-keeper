@@ -61,4 +61,13 @@ class Password extends Model
         return $this->users()->wherePivot('user_id', $userId)->count() > 0 ? true : false;
     }
 
+    public function editable()
+    {
+        return $this->user_id == auth()->user()->id;
+    }
+
+    public function removable()
+    {
+        return $this->user_id == auth()->user()->id;
+    }
 }

@@ -18,6 +18,8 @@ class ProjectsController extends Controller
 
     public function __construct(ProjectsRepository $projects, PasswordsRepository $passwords)
     {
+        $this->middleware('auth');
+
         $this->projects = $projects;
         $this->passwords = $passwords;
     }

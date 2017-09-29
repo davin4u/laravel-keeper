@@ -44,13 +44,25 @@ class PasswordsRepository
 
     public function delete($id)
     {
-        return Password::where('user_id', auth()->user()->id)
-                ->where('id', $id)
-                ->delete();
+        $password = $this->getById($id);
+
+        if (is_object($password)) {
+            if ($password->removable()) {
+                return $password->delete();
+            }
+        }
+
+        return false;
     }
 
     public function update($id, $data = [])
     {
+        $password = $this->getById($id);
+
+        if (!is_object($password) || !$password->editable()) {
+            return false;
+        }
+
         $shareWith = [];
 
         if (isset($data['share_with'])) {
@@ -60,16 +72,11 @@ class PasswordsRepository
 
         $this->validator->validate($data);
 
-        $update = Password::where('user_id', auth()->user()->id)
-                ->where('id', $id)
-                ->first()
-                ->update($data);
+        $password->update($data);
 
-        if ($update) {
-            $this->sharePasswordWithUsers($id, $shareWith, true);
-        }
+        $this->sharePasswordWithUsers($id, $shareWith, true);
 
-        return $update;
+        return $password;
     }
 
     public function getProjectPasswords($projectId)
