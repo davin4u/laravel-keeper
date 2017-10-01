@@ -7,10 +7,15 @@ class ProjectsValidator
 
     public function validate($data)
     {
-        validator($data, [
+        $validator = validator($data, [
             'name' => 'required|max:190',
-            'url' => 'url|max:190'
-        ])->validate();
+        ]);
+
+        $validator->sometimes('url', 'url|max:190', function($input) {
+          return !empty($input->url);
+        });
+
+        $validator->validate();
     }
 
 }
