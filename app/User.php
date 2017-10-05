@@ -34,4 +34,14 @@ class User extends Authenticatable
         return $this->belongsToMany(Password::class);
     }
 
+    public function saveProfile($request)
+    {
+        if ($request->get('password') && $request->get('password') == $request->get('confirm_password')) {
+            $this->update(['password' => \Hash::make($request->password)]);
+        }
+
+        return $this->update([
+          'name' => $request->get('name')
+        ]);
+    }
 }

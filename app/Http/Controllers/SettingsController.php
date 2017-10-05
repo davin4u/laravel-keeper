@@ -66,4 +66,13 @@ class SettingsController extends Controller
     return redirect('/settings/password-types');
   }
 
+  public function profile()
+  {
+    if (request()->isMethod('post')) {
+      auth()->user()->saveProfile(request());
+    }
+
+    return view('settings.profile', ['user' => auth()->user()]);
+  }
+
 }

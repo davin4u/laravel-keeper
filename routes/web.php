@@ -52,5 +52,7 @@ Route::group(['before' => 'auth'], function() {
     Route::get('/settings/password-types/{id}/edit', 'SettingsController@edit');
     Route::post('/settings/password-types/{id}/update', 'SettingsController@update');
     Route::get('/settings/password-types/{id}/delete', 'SettingsController@delete');
+    Route::get('/settings/profile', 'SettingsController@profile');
+    Route::post('/settings/profile', 'SettingsController@profile');
 
 });
