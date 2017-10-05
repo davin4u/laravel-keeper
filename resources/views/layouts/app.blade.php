@@ -36,6 +36,8 @@
     <!-- Custom Theme Style -->
     <link href="/css/custom.min.css" rel="stylesheet">
 
+    @yield('styles')
+
     <!-- Scripts -->
     <script>
         window.Laravel = {!! json_encode([
