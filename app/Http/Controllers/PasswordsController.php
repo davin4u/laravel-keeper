@@ -14,85 +14,85 @@ use App\Repositories\ProjectsRepository;
 
 class PasswordsController extends Controller
 {
-    protected $projects;
-    protected $passwords;
+  protected $projects;
+  protected $passwords;
 
-    public function __construct(ProjectsRepository $projects, PasswordsRepository $passwords)
-    {
-        $this->middleware('auth');
+  public function __construct(ProjectsRepository $projects, PasswordsRepository $passwords)
+  {
+    $this->middleware('auth');
 
-        $this->projects = $projects;
-        $this->passwords = $passwords;
-    }
+    $this->projects = $projects;
+    $this->passwords = $passwords;
+  }
 
-    public function index()
-    {
-        return view('passwords.index', [
-            'passwords' => $this->passwords->all()
-        ]);
-    }
+  public function index()
+  {
+    return view('passwords.index', [
+      'passwords' => $this->passwords->all()
+    ]);
+  }
 
-    public function projectPasswordsList(Project $project)
-    {
-        return view('passwords.index', [
-            'passwords' => $this->passwords->getProjectPasswords($project->id),
-            'project' => $project
-        ]);
-    }
+  public function projectPasswordsList(Project $project)
+  {
+    return view('passwords.index', [
+      'passwords' => $this->passwords->getProjectPasswords($project->id),
+      'project' => $project
+    ]);
+  }
 
-    public function create()
-    {
-        return view('passwords.create', [
-            'projects' => $this->projects->all(),
-            'password_types' => PasswordType::all()
-        ]);
-    }
+  public function create()
+  {
+    return view('passwords.create', [
+      'projects' => $this->projects->all(),
+      'password_types' => PasswordType::all()
+    ]);
+  }
 
-    public function store()
-    {
-        $this->passwords->create(request([
-            'project_id',
-            'type',
-            'name',
-            'username',
-            'password',
-            'full_description'
-        ]));
+  public function store()
+  {
+    $this->passwords->create(request([
+      'project_id',
+      'type',
+      'name',
+      'username',
+      'password',
+      'full_description'
+    ]));
 
-        return redirect('passwords');
-    }
+    return redirect('passwords');
+  }
 
-    public function edit($id)
-    {
-        $password = $this->passwords->getById($id);
+  public function edit($id)
+  {
+    $password = $this->passwords->getById($id);
 
-        return view('passwords.edit', [
-            'projects' => $this->projects->all(),
-            'password' => $password,
-            'password_types' => PasswordType::all(),
-            'users' => $password->user_id == auth()->user()->id ? User::where('id', '<>', auth()->user()->id)->get() : []
-        ]);
-    }
+    return view('passwords.edit', [
+      'projects' => $this->projects->all(),
+      'password' => $password,
+      'password_types' => PasswordType::all(),
+      'users' => $password->user_id == auth()->user()->id ? User::where('id', '<>', auth()->user()->id)->get() : []
+    ]);
+  }
 
-    public function update($id)
-    {
-        $this->passwords->update($id, request([
-            'project_id',
-            'type',
-            'name',
-            'username',
-            'password',
-            'full_description',
-            'share_with'
-        ]));
+  public function update($id)
+  {
+    $this->passwords->update($id, request([
+      'project_id',
+      'type',
+      'name',
+      'username',
+      'password',
+      'full_description',
+      'share_with'
+    ]));
 
-        return redirect('passwords');
-    }
+    return redirect('passwords');
+  }
 
-    public function delete($id)
-    {
-        $this->passwords->delete($id);
+  public function delete($id)
+  {
+    $this->passwords->delete($id);
 
-        return redirect('passwords');
-    }
+    return redirect('passwords');
+  }
 }

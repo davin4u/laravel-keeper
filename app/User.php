@@ -38,7 +38,7 @@ class User extends Authenticatable
   public function saveProfile($request)
   {
     if ($request->get('password') && $request->get('password') == $request->get('confirm_password')) {
-      $this->update(['password' => \Hash::make($request->password)]);
+      $this->update(['password' => \Hash::make($request->get('password'))]);
     }
 
     if ($request->hasFile('avatar')) {

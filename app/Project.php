@@ -9,9 +9,9 @@ use App\Password;
 
 class Project extends Model
 {
-    use SoftDeletes;
+  use SoftDeletes;
 
-    protected $dates = ['deleted_at'];
+  protected $dates = ['deleted_at'];
 
-    protected $fillable = ['user_id', 'name', 'url', 'short_description', 'full_description'];
+  protected $fillable = ['user_id', 'name', 'url', 'short_description', 'full_description'];
 }
