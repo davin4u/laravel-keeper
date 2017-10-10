@@ -16,7 +16,7 @@
                             {{ $error }}
                         </div>
                         @endforeach
-                        <form class="form-horizontal form-label-left input_mask" method="POST" action="{{ action('SettingsController@profile') }}">
+                        <form class="form-horizontal form-label-left input_mask" enctype="multipart/form-data" method="POST" action="{{ action('SettingsController@profile') }}">
                             {{ csrf_field() }}
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
                                 <input value="{{ $user->name }}" type="text" name="name" class="form-control has-feedback-left" placeholder="Name" />
@@ -31,6 +31,10 @@
                             <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
                                 <input value="" type="password" name="confirm_password" class="form-control has-feedback-left" placeholder="Repeat password" />
                                 <span class="fa fa-credit-card form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+
+                            <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                                <input type="file" name="avatar" class="form-control" />
                             </div>
 
                             <div class="clearfix"></div>
