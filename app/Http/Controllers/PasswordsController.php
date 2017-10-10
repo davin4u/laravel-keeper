@@ -66,6 +66,10 @@ class PasswordsController extends Controller
   {
     $password = $this->passwords->getById($id);
 
+    if (is_object($password)) {
+      $password->updateViewed();
+    }
+
     return view('passwords.edit', [
       'projects' => $this->projects->all(),
       'password' => $password,

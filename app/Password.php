@@ -9,13 +9,15 @@ use App\User;
 use App\Project;
 use App\PasswordType;
 
+use Carbon\Carbon;
+
 class Password extends Model
 {
   use SoftDeletes;
 
   protected $dates = ['deleted_at'];
 
-  protected $fillable = ['user_id', 'project_id', 'type', 'name', 'username', 'password', 'full_description'];
+  protected $fillable = ['user_id', 'project_id', 'type', 'name', 'username', 'password', 'full_description', 'viewed_at'];
 
   public static function boot() {
     parent::boot();
@@ -74,4 +76,13 @@ class Password extends Model
   {
     return $this->user_id == auth()->user()->id;
   }
+
+  public function updateViewed()
+  {
+    $this->update([
+      'password' => $this->getDecryptedPasswordAttribute(),
+      'viewed_at' =>Carbon::now()
+    ]);
+  }
+
 }

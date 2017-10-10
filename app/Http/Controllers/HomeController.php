@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Repositories\PasswordsRepository;
 
 class HomeController extends Controller
 {
@@ -21,8 +22,10 @@ class HomeController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index()
+  public function index(\App\Repositories\PasswordsRepository $passwords)
   {
-    return view('home');
+    return view('home', [
+      'lastViewed' => $passwords->getLastViewed()
+    ]);
   }
 }

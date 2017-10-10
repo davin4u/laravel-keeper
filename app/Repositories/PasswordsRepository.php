@@ -108,4 +108,13 @@ class PasswordsRepository
             }
         }
     }
+
+    public function getLastViewed($limit = 5)
+    {
+      return auth()->user()->passwords()
+                            ->orderBy('viewed_at', 'DESC')
+                            ->offset(0)
+                            ->take($limit)
+                            ->get();
+    }
 }
