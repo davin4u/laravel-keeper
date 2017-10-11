@@ -18,9 +18,10 @@
             <table class="table table-striped table-bordered">
               <thead>
                 <tr>
-                  <th style="width: 10%;">Type</th>
-                  <th style="width: 15%;">Project</th>
-                  <th style="width: 50%;">Name</th>
+                  <th style="width: 25%;">Type</th>
+                  <th style="width: 20%;">Project</th>
+                  <th style="width: 45%;">Name</th>
+                  <th style="width: 10%;"></th>
                 </tr>
               </thead>
               <tbody>
@@ -33,6 +34,7 @@
                       <br />
                       <small>Created at {{ $password->created_at }}</small>
                     </td>
+                    <td><a href="#" class="btn btn-danger view-password-details" data-id="{{ $password->id }}"><i class="fa fa-arrow-right"></i></a></td>
                   </tr>
                 @endforeach
               </tbody>
@@ -44,10 +46,23 @@
     <div class="col-md-6">
       @if (!empty($lastViewed))
         @foreach ($lastViewed as $password)
-          <div class="panel panel-default" style="display:none;">
-            <div class="panel-heading"><h2>{{ $password->name }}</h2></div>
+          <div id="password-details-{{ $password->id }}" class="panel panel-default password-details" style="display:none;">
+            <div class="panel-heading"><h2>[ <i class="fa {{ $password->passwordType->icon }}"></i> {{ $password->passwordType->name }} ] {{ $password->name }}</h2></div>
             <div class="panel-body">
+              <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                  <input value="{{ $password->username }}" type="text" name="username" class="form-control has-feedback-left" placeholder="Username" />
+                  <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+              </div>
 
+              <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback password-group">
+                  <input value="{{ $password->decrypted_password }}" type="text" name="password" class="form-control has-feedback-left" placeholder="Password" />
+                  <span class="fa fa-credit-card form-control-feedback left" aria-hidden="true"></span>
+              </div>
+
+              <div class="col-md-12 col-sm-12 col-xs-12 form-group has-feedback">
+                  <textarea name="full_description" class="form-control has-feedback-left" rows="{{ $password->getDescriptionRowsCount(10) }}" placeholder="Full Description">{{ $password->full_description }}</textarea>
+                  <span class="fa fa-align-justify form-control-feedback left" aria-hidden="true"></span>
+              </div>
             </div>
           </div>
         @endforeach
@@ -55,4 +70,17 @@
     </div>
   </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+  $(document).ready(function(){
+    $('.view-password-details').on('click', function(){
+      $('.password-details').hide();
+      $('#password-details-' + $(this).attr("data-id")).show();
+
+      return false;
+    });
+  });
+</script>
 @endsection
