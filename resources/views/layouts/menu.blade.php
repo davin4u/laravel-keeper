@@ -30,6 +30,9 @@
                 <ul class="nav child_menu">
                   <li><a href="/settings/profile">Profile</a></li>
                   <li><a href="/settings/password-types">Password Types</a></li>
+                  @if (auth()->user()->hasRole(\App\Role::ADMIN_ROLE) || auth()->user()->hasRole(\App\Role::SV_ROLE))
+                  <li><a href="/settings/permissions">Users Permissions</a></li>
+                  @endif
                 </ul>
             </li>
         </ul>
