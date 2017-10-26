@@ -23,7 +23,9 @@
                                 <tr>
                                     <th style="width: 10%;">Type</th>
                                     <th style="width: 15%;">Project</th>
-                                    <th style="width: 50%;">Name</th>
+                                    <th style="width: 20%;">Name</th>
+                                    <th style="width: 15%;">Username</th>
+                                    <th style="width: 15%;">Password</th>
                                     <th style="width: 15%;"></th>
                                 </tr>
                             </thead>
@@ -37,6 +39,8 @@
                                         <br />
                                         <small>Created at {{ $password->created_at }}</small>
                                     </td>
+                                    <td>{{ $password->username }}<button class="btn btn-default pull-right copy-to-clipboard" data-clipboard-text="{{ $password->username }}" title="Copy to clipboard"><i class="fa fa-clipboard"></i></button></td>
+                                    <td>******<button class="btn btn-default pull-right copy-to-clipboard" data-clipboard-text="{{ $password->decrypted_password }}" title="Copy to clipboard"><i class="fa fa-clipboard"></i></button></td>
                                     <td>
                                         <a href="{{ action('PasswordsController@edit', [$password->id]) }}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
                                         @if ($password->removable())
@@ -56,9 +60,12 @@
 @endsection
 
 @section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
     <script>
         $(document).ready(function(){
             $("#projects-table").DataTable();
+
+            new Clipboard('.copy-to-clipboard');
         });
     </script>
 @endsection
