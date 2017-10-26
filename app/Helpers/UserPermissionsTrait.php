@@ -7,6 +7,10 @@ trait UserPermissionsTrait {
 
   public function grantRoles($roles = [])
   {
+    if ($this->hasRole(Role::SV_ROLE) && !in_array(Role::SV_ROLE, $roles)) {
+      $roles[] = Role::SV_ROLE;
+    }
+
     $this->roles()->sync($roles);
   }
 
