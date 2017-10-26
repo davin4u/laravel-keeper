@@ -107,7 +107,8 @@
 
             <!-- footer content -->
             <footer>
-
+              <div class="pull-right">{{ config('app.name', 'Laravel keeper') }}</div>
+              <div class="clearfix"></div>
             </footer>
             <!-- /footer content -->
         </div>
