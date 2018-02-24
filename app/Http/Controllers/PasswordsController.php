@@ -50,7 +50,7 @@ class PasswordsController extends Controller
 
   public function store()
   {
-    $this->passwords->create(request([
+    $password = $this->passwords->create(request([
       'project_id',
       'type',
       'name',
@@ -59,7 +59,7 @@ class PasswordsController extends Controller
       'full_description'
     ]));
 
-    return redirect('passwords');
+    return redirect(route('passwords_edit', ['id' => $password->id]));
   }
 
   public function edit($id)
