@@ -14,4 +14,9 @@ class Project extends Model
   protected $dates = ['deleted_at'];
 
   protected $fillable = ['user_id', 'name', 'url', 'short_description', 'full_description'];
+
+  public function removable()
+  {
+    return $this->user_id == auth()->user()->id;
+  }
 }

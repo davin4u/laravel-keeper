@@ -25,6 +25,8 @@ Auth::routes();
 
 Route::middleware(['auth', 'permissions'])->group(function() {
     Route::get('/home', 'HomeController@index')->name('dashboard');
+    Route::get('/download/{id}', 'HomeController@download')->name('download');
+    Route::get('/delete-file/{id}', 'HomeController@deleteFile')->name('delete_file');
 
     //Projects
     Route::get('/projects', 'ProjectsController@index')->name('projects_index');

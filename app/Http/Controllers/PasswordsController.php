@@ -56,7 +56,8 @@ class PasswordsController extends Controller
       'name',
       'username',
       'password',
-      'full_description'
+      'full_description',
+      'files'
     ]));
 
     return redirect(route('passwords_edit', ['id' => $password->id]));
@@ -74,7 +75,8 @@ class PasswordsController extends Controller
       'projects' => $this->projects->all(),
       'password' => $password,
       'password_types' => PasswordType::all(),
-      'users' => $password->user_id == auth()->user()->id ? User::where('id', '<>', auth()->user()->id)->get() : []
+      'users' => $password->user_id == auth()->user()->id ? User::where('id', '<>', auth()->user()->id)->get() : [],
+      'files' => $password->files()
     ]);
   }
 
@@ -87,7 +89,8 @@ class PasswordsController extends Controller
       'username',
       'password',
       'full_description',
-      'share_with'
+      'share_with',
+      'files'
     ]));
 
     return redirect('passwords');

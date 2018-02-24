@@ -18,7 +18,7 @@
                         </div>
                         @endforeach
 
-                        <form class="form-horizontal form-label-left input_mask" method="POST" action="{{ action('PasswordsController@store') }}">
+                        <form class="form-horizontal form-label-left input_mask" method="POST" action="{{ action('PasswordsController@store') }}" enctype="multipart/form-data">
 
                             {{ csrf_field() }}
                             
@@ -60,6 +60,13 @@
                                 <span class="fa fa-align-justify form-control-feedback left" aria-hidden="true"></span>
                             </div>
 
+                            <div class="col-md-12 col-sm-12 col-xs-12 form-group atach-files-group">
+                                <div class="file-line last">
+                                    <a href="#" class="remove-line"><i class="fa fa-close"></i></a>
+                                    <input type="file" name="files[]" class="form-control atach-file" />
+                                </div>
+                            </div>
+
                             <div class="clearfix"></div>
                             <div class="ln_solid"></div>
 
@@ -77,4 +84,45 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            $('body').on('change', '.atach-file', function() {
+                if ($(this).parent().hasClass('last')) {
+                    $('.atach-files-group').append(`
+                        <div class="file-line last">
+                            <a href="#" class="remove-line"><i class="fa fa-close"></i></a>
+                            <input type="file" name="files[]" class="form-control atach-file" />
+                        </div>
+                    `);
+
+                    $(this).parent().removeClass('last');
+                }
+            });
+
+            $('body').on('click', '.remove-line', function() {
+                $(this).closest('.file-line').remove();
+
+                return false;
+            });
+
+            $('body').on('click', '.remove-file', function() {
+                var $this = $(this);
+
+                var id = $(this).attr("data-id");
+
+                $.ajax({
+                    url: '/delete-file/' + id,
+                    type: 'get',
+                    success: function(response) {
+                        $this.closest('li').remove();
+                    }
+                });
+
+                return false;
+            });
+        });
+    </script>
 @endsection
