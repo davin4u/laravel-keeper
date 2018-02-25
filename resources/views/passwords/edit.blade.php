@@ -21,7 +21,7 @@
                         </div>
                         @endforeach
 
-                        <form class="form-horizontal form-label-left input_mask" method="POST" action="{{ action('PasswordsController@update', [$password->id]) }}">
+                        <form class="form-horizontal form-label-left input_mask" method="POST" action="{{ action('PasswordsController@update', [$password->id]) }}" enctype="multipart/form-data">
 
                             {{ csrf_field() }}
 
@@ -75,6 +75,37 @@
                             <div class="clearfix"></div>
                             <div class="ln_solid"></div>
 
+                            @if (!empty($files))
+                                <h2>Attached Files</h2>
+                                <div class="well">
+                                    <ul class="files-list">
+                                        @foreach ($files as $file)
+                                            <li>
+                                                @if ($password->removable())
+                                                <a href="#" data-id="{{ $file->id }}" class="remove-file"><i class="fa fa-close"></i></a>
+                                                @endif
+
+                                                <div class="file-icon">
+                                                    <a href="{{ route('download', ['id' => $file->id]) }}"><img src="/images/{{ $file->icon() }}.png" /></a>
+                                                </div>
+
+                                                <div class="file-name"><a href="{{ route('download', ['id' => $file->id]) }}">{{ $file->original_name }}</a></div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <div class="col-md-12 col-sm-12 col-xs-12 form-group atach-files-group">
+                                <div class="file-line last">
+                                    <a href="#" class="remove-line"><i class="fa fa-close"></i></a>
+                                    <input type="file" name="files[]" class="form-control atach-file" />
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+                            <div class="ln_solid"></div>
+
                             @if ($password->editable())
                                 <h2>Share password with users:</h2>
 
@@ -104,4 +135,45 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            $('body').on('change', '.atach-file', function() {
+                if ($(this).parent().hasClass('last')) {
+                    $('.atach-files-group').append(`
+                        <div class="file-line last">
+                            <a href="#" class="remove-line"><i class="fa fa-close"></i></a>
+                            <input type="file" name="files[]" class="form-control atach-file" />
+                        </div>
+                    `);
+
+                    $(this).parent().removeClass('last');
+                }
+            });
+
+            $('body').on('click', '.remove-line', function() {
+                $(this).closest('.file-line').remove();
+
+                return false;
+            });
+
+            $('body').on('click', '.remove-file', function() {
+                var $this = $(this);
+
+                var id = $(this).attr("data-id");
+
+                $.ajax({
+                    url: '/delete-file/' + id,
+                    type: 'get',
+                    success: function(response) {
+                        $this.closest('li').remove();
+                    }
+                });
+
+                return false;
+            });
+        });
+    </script>
 @endsection

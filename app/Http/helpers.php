@@ -22,3 +22,8 @@ function menu($key)
 
   return isset($menu[$key]) ? $menu[$key] : [];
 }
+
+function user($userId)
+{
+  return App\User::find($userId);
+}

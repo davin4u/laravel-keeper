@@ -16,9 +16,15 @@ class ProjectsRepository
 
     public function create($data = [])
     {
-        $this->validator->validate($data);
+        $this->validator->validate(array_except($data, ['files']));
 
-        return Project::create(array_merge($data, ['user_id' => auth()->user()->id]));
+        $project = Project::create(array_merge(array_except($data, ['files']), ['user_id' => auth()->user()->id]));
+
+        if (isset($data['files'])) {
+            $project->atachFiles($data['files']);
+        }
+
+        return $project;
     }
 
     public function all()
@@ -42,11 +48,18 @@ class ProjectsRepository
 
     public function update($id, $data = [])
     {
-        $this->validator->validate($data);
+        $this->validator->validate(array_except($data, ['files']));
 
-        return Project::where('user_id', auth()->user()->id)
-                ->where('id', $id)
-                ->first()
-                ->update($data);
+        $project = $this->getById($id);
+
+        if (!empty($project)) {
+            $project->update(array_except($data, ['files']));
+
+            if (isset($data['files'])) {
+                $project->atachFiles($data['files']);
+            }
+        }
+
+        return $project;
     }
 }

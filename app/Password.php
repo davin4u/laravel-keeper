@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\User;
+use App\File;
 use App\Project;
 use App\PasswordType;
+use App\Repositories\FilesRepository;
 
 use Carbon\Carbon;
 
@@ -83,6 +85,31 @@ class Password extends Model
       'password' => $this->getDecryptedPasswordAttribute(),
       'viewed_at' =>Carbon::now()
     ]);
+  }
+
+  public function atachFiles($files = [])
+  {
+    if (!empty($files)) {
+      $repository = new FilesRepository();
+
+      foreach ($files as $file) {
+        $fileName = md5($file->getFileName() . time()) . '.' . $file->guessClientExtension();
+
+        $path = $file->storeAs('files/passwords/' . $this->id, $fileName, 'public');
+
+        $repository->create([
+          'type' => File::TYPE_PASSWORD,
+          'entity_id' => $this->id,
+          'path' => $path,
+          'original_name' => str_replace(' ', '-', $file->getClientOriginalName())
+        ]);
+      }
+    }
+  }
+
+  public function files()
+  {
+    return File::passwords()->where('entity_id', $this->id)->get();
   }
 
 }

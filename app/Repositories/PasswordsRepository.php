@@ -6,14 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Password;
 use App\Validators\PasswordsValidator;
+use App\Repositories\FilesRepository;
 
 class PasswordsRepository
 {
 
     protected $validator;
 
-    public function __construct(PasswordsValidator $validator) {
+    public function __construct(PasswordsValidator $validator, FilesRepository $files) {
         $this->validator = $validator;
+        $this->files = $files;
     }
 
     public function all()
@@ -35,7 +37,11 @@ class PasswordsRepository
     {
         $this->validator->validate($data);
 
-        $password = Password::create(array_merge($data, ['user_id' => auth()->user()->id]));
+        $password = Password::create(array_merge(array_except($data, ['files']), ['user_id' => auth()->user()->id]));
+
+        if (isset($data['files'])) {
+            $password->atachFiles($data['files']);
+        }
 
         auth()->user()->passwords()->attach($password->id);
 
@@ -63,18 +69,17 @@ class PasswordsRepository
             return false;
         }
 
-        $shareWith = [];
+        $this->validator->validate(array_except($data, ['share_with', 'files']));
 
-        if (isset($data['share_with'])) {
-            $shareWith = $data['share_with'];
-            unset($data['share_with']);
+        $password->update(array_except($data, ['share_with', 'files']));
+
+        if (isset($data['files'])) {
+            $password->atachFiles($data['files']);
         }
 
-        $this->validator->validate($data);
-
-        $password->update($data);
-
-        $this->sharePasswordWithUsers($id, $shareWith, true);
+        if (isset($data['share_with'])) {
+            $this->sharePasswordWithUsers($id, $data['share_with'], true);
+        }
 
         return $password;
     }

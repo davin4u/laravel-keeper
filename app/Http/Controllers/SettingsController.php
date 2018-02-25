@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\PasswordType;
 use App\Repositories\PasswordTypesRepository;
+use App\Role;
+use App\User;
 
 class SettingsController extends Controller
 {
@@ -75,4 +77,21 @@ class SettingsController extends Controller
     return view('settings.profile', ['user' => auth()->user()]);
   }
 
+  public function permissions()
+  {
+    if (request()->isMethod('post')) {
+      $input = request()->only('roles');
+
+      if (!empty($input)) {
+        foreach ($input['roles'] as $userId => $roles) {
+          user($userId)->grantRoles($roles);
+        }
+      }
+    }
+
+    return view('settings.permissions', [
+      'users' => User::all(),
+      'roles' => Role::all()
+    ]);
+  }
 }

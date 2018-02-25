@@ -7,10 +7,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
 
 use App\Password;
+use App\Role;
+use App\Helpers\UserPermissionsTrait;
 
 class User extends Authenticatable
 {
   use Notifiable;
+  use UserPermissionsTrait;
 
   /**
    * The attributes that are mass assignable.
@@ -33,6 +36,11 @@ class User extends Authenticatable
   public function passwords()
   {
     return $this->belongsToMany(Password::class);
+  }
+
+  public function roles()
+  {
+    return $this->belongsToMany(Role::class);
   }
 
   public function saveProfile($request)
