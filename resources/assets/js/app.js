@@ -7,6 +7,7 @@
 
 //require('./bootstrap');
 
+/*
 $(document).ready(function(){
     $(".show-password-btn").on("click", function(){
         if ($(".show-password-btn").hasClass("shown")) {
@@ -20,3 +21,4 @@ $(document).ready(function(){
         return false;
     });
 });
+*/
