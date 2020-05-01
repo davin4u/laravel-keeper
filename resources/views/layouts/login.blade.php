@@ -19,14 +19,15 @@
         </script>
     </head>
 
-    <body class="login">
-        <div>
-            <a class="hiddenanchor" id="signup"></a>
-            <a class="hiddenanchor" id="signin"></a>
-
-            <div class="login_wrapper">
-                @yield('content')
+    <body class="bg-blue-600">
+        <div id="app">
+            <div class="w-full">
+                <div class="w-1/3 mx-auto">
+                    @yield('content')
+                </div>
             </div>
         </div>
+
+        <script src="/js/app.js"></script>
     </body>
 </html>

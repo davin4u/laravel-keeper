@@ -1,24 +1,22 @@
+require('./bootstrap');
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+import Vue from 'vue';
+import LoginForm from "./components/Auth/LoginForm";
 
-//require('./bootstrap');
+import { routex } from './mixins/routex';
 
-/*
-$(document).ready(function(){
-    $(".show-password-btn").on("click", function(){
-        if ($(".show-password-btn").hasClass("shown")) {
-            $(this).closest(".password-group").find("input").attr("type", "password");
-            $(".show-password-btn").removeClass("shown");
-        }
-        else {
-            $(this).closest(".password-group").find("input").attr("type", "text");
-            $(".show-password-btn").addClass("shown");
-        }
-        return false;
-    });
+Vue.mixin(routex);
+
+window.Events = new Vue();
+
+Vue.component('loginform', LoginForm);
+
+window.$vueApp = new Vue({
+    el: '#app',
+
+    data: {},
+
+    components: {
+        LoginForm
+    }
 });
-*/
