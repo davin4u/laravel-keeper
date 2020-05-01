@@ -1,10 +1,10 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <section class="mt-20">
         <Panel>
-            <template v-slot:header>Login</template>
+            <template v-slot:header>Create Account</template>
 
             <template v-slot:body>
-                <form role="form" method="POST" :action="route('auth.login')">
+                <form role="form" method="POST" :action="route('auth.register')">
                     <FormInput v-model="form.email"
                                :name="'email'"
                                :type="'email'"
@@ -17,15 +17,17 @@
                                :placeholder="'Password'"
                     ></FormInput>
 
+                    <FormInput v-model="form.password_confirmation"
+                               :name="'password_confirmation'"
+                               :type="'password'"
+                               :placeholder="'Confirm password'"
+                    ></FormInput>
+
                     <div>
-                        <Button @click.native.prevent="login">Log in</Button>
+                        <Button @click.native.prevent="login">Register</Button>
 
                         <div class="flex text-gray-500 mt-2 text-xs justify-between">
-                            <a class="hover:underline" :href="route('auth.restore_password')">Lost your password?</a>
-
-                            <span>|</span>
-
-                            <p>New to site? <a :href="route('auth.register')" class="hover:underline">Create Account</a></p>
+                            <p>Already a member? <a :href="route('auth.login')" class="hover:underline">Log in</a></p>
                         </div>
                     </div>
                 </form>
@@ -40,7 +42,7 @@
     import Button from "../Layout/Button";
 
     export default {
-        name: "LoginForm",
+        name: "RegisterForm",
 
         components: {Button, FormInput, Panel},
 
@@ -48,17 +50,9 @@
             return {
                 form: {
                     email: '',
-                    password: ''
+                    password: '',
+                    password_confirmation: ''
                 }
-            }
-        },
-
-        methods: {
-            login() {
-                this.http().post(this.route('auth.login'), this.form)
-                    .then((response) => {
-                        console.log(response);
-                    });
             }
         }
     }

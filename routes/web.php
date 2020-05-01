@@ -21,6 +21,8 @@ Route::get('/logout', function(){
     return redirect('/login');
 });
 
+Route::post('/login', 'LoginController@login')->name('auth.login');
+
 Auth::routes();
 
 Route::middleware(['auth', 'permissions'])->group(function() {
