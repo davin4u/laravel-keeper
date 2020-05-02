@@ -5,27 +5,33 @@
 
             <template v-slot:body>
                 <form role="form" method="POST" :action="route('auth.login')">
-                    <FormInput v-model="form.email"
-                               :name="'email'"
-                               :type="'email'"
-                               :placeholder="'E-mail'"
-                    ></FormInput>
+                    <Error v-if="error">{{ error }}</Error>
 
-                    <FormInput v-model="form.password"
-                               :name="'password'"
-                               :type="'password'"
-                               :placeholder="'Password'"
-                    ></FormInput>
+                    <div class="relative">
+                        <Loading v-if="loading"></Loading>
 
-                    <div>
-                        <Button @click.native.prevent="login">Log in</Button>
+                        <FormInput v-model="form.email"
+                                   :name="'email'"
+                                   :type="'email'"
+                                   :placeholder="'E-mail'"
+                        ></FormInput>
 
-                        <div class="flex text-gray-500 mt-2 text-xs justify-between">
-                            <a class="hover:underline" :href="route('auth.restore_password')">Lost your password?</a>
+                        <FormInput v-model="form.password"
+                                   :name="'password'"
+                                   :type="'password'"
+                                   :placeholder="'Password'"
+                        ></FormInput>
 
-                            <span>|</span>
+                        <div>
+                            <Button @click.native.prevent="login">Log in</Button>
 
-                            <p>New to site? <a :href="route('auth.register')" class="hover:underline">Create Account</a></p>
+                            <div class="flex text-gray-500 mt-2 text-xs justify-between">
+                                <a class="hover:underline" :href="route('auth.restore_password')">Lost your password?</a>
+
+                                <span>|</span>
+
+                                <p>New to site? <a :href="route('auth.register')" class="hover:underline">Create Account</a></p>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -38,14 +44,20 @@
     import Panel from "../Layout/Panel";
     import FormInput from "../Layout/FormInput";
     import Button from "../Layout/Button";
+    import Error from "../Layout/Error";
+    import Loading from "../Layout/Loading";
 
     export default {
         name: "LoginForm",
 
-        components: {Button, FormInput, Panel},
+        components: {Loading, Error, Button, FormInput, Panel},
 
         data() {
             return {
+                loading: false,
+
+                error: '',
+
                 form: {
                     email: '',
                     password: ''
@@ -55,9 +67,23 @@
 
         methods: {
             login() {
+                this.loading = true;
+
                 this.http().post(this.route('auth.login'), this.form)
                     .then((response) => {
-                        console.log(response);
+                        this.loading = false;
+
+                        if (!_.isUndefined(response.error)) {
+                            this.error = response.error;
+                        }
+
+                        if (!_.isUndefined(response.success) && response.success === true) {
+                            document.location.href = response.redirect;
+                        }
+                    })
+                    .catch(() => {
+                        this.loading = false;
+                        this.error = 'Something went wrong. Please contact our support.';
                     });
             }
         }

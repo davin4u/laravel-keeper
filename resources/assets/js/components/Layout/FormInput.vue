@@ -1,13 +1,21 @@
 <template>
     <div class="mb-2">
         <input
-                class="w-full border border-gray-200 p-2"
+                class="w-full border  p-2"
+                :class="{
+                    'border-gray-200': !error,
+                    'border-red-600': error
+                }"
                 :name="name"
                 :type="type"
                 :placeholder="placeholder"
                 :value="value"
                 v-model="inputValue"
         />
+
+        <div v-if="error" class="mt-2 text-xs text-red-600 font-bold">
+            {{ error }}
+        </div>
     </div>
 </template>
 
@@ -29,6 +37,10 @@
                 default: ''
             },
             value: {
+                type: String,
+                default: ''
+            },
+            error: {
                 type: String,
                 default: ''
             }

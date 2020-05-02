@@ -4,33 +4,48 @@
             <template v-slot:header>Create Account</template>
 
             <template v-slot:body>
-                <form role="form" method="POST" :action="route('auth.register')">
-                    <FormInput v-model="form.email"
-                               :name="'email'"
-                               :type="'email'"
-                               :placeholder="'E-mail'"
-                    ></FormInput>
+                <Error v-if="error">{{ error }}</Error>
 
-                    <FormInput v-model="form.password"
-                               :name="'password'"
-                               :type="'password'"
-                               :placeholder="'Password'"
-                    ></FormInput>
+                <div class="relative">
+                    <Loading v-if="loading"></Loading>
 
-                    <FormInput v-model="form.password_confirmation"
-                               :name="'password_confirmation'"
-                               :type="'password'"
-                               :placeholder="'Confirm password'"
-                    ></FormInput>
+                    <form role="form" method="POST" :action="route('auth.register')">
+                        <FormInput v-model="form.name"
+                                   :name="'name'"
+                                   :type="'text'"
+                                   :placeholder="'Your name'"
+                                   :error="form.errors.name"
+                        ></FormInput>
 
-                    <div>
-                        <Button @click.native.prevent="login">Register</Button>
+                        <FormInput v-model="form.email"
+                                   :name="'email'"
+                                   :type="'email'"
+                                   :placeholder="'E-mail'"
+                                   :error="form.errors.email"
+                        ></FormInput>
 
-                        <div class="flex text-gray-500 mt-2 text-xs justify-between">
-                            <p>Already a member? <a :href="route('auth.login')" class="hover:underline">Log in</a></p>
+                        <FormInput v-model="form.password"
+                                   :name="'password'"
+                                   :type="'password'"
+                                   :placeholder="'Password'"
+                                   :error="form.errors.password"
+                        ></FormInput>
+
+                        <FormInput v-model="form.password_confirmation"
+                                   :name="'password_confirmation'"
+                                   :type="'password'"
+                                   :placeholder="'Confirm password'"
+                        ></FormInput>
+
+                        <div>
+                            <Button @click.native.prevent="register">Register</Button>
+
+                            <div class="flex text-gray-500 mt-2 text-xs justify-between">
+                                <p>Already a member? <a :href="route('auth.login')" class="hover:underline">Log in</a></p>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </template>
         </Panel>
     </section>
@@ -40,19 +55,91 @@
     import Panel from "../Layout/Panel";
     import FormInput from "../Layout/FormInput";
     import Button from "../Layout/Button";
+    import Loading from "../Layout/Loading";
+    import Error from "../Layout/Error";
 
     export default {
         name: "RegisterForm",
 
-        components: {Button, FormInput, Panel},
+        components: {Error, Loading, Button, FormInput, Panel},
 
         data() {
             return {
+                loading: false,
+
+                error: '',
+
                 form: {
+                    name: '',
                     email: '',
                     password: '',
-                    password_confirmation: ''
+                    password_confirmation: '',
+                    errors: {
+                        name: '',
+                        email: '',
+                        password: ''
+                    }
                 }
+            }
+        },
+
+        methods: {
+            register() {
+                this.error = '';
+                this.loading = true;
+
+                let data = {
+                    name: this.form.name,
+                    email: this.form.email,
+                    password: this.form.password,
+                    password_confirmation: this.form.password_confirmation
+                };
+
+                this.http().post(this.route('auth.register'), data)
+                    .then((response) => {
+                        this.loading = false;
+
+                        this.processResponse(response);
+                    })
+                    .catch(() => {
+                        this.loading = false;
+
+                        this.error = 'Something went wrong. Please contact our support.';
+                    });
+            },
+
+            processResponse(response) {
+                this.processErrors(response.errors || {});
+
+                if (!_.isUndefined(response.user) && response.success === true) {
+                    document.location.href = response.redirect;
+                }
+            },
+
+            processErrors(errors) {
+                let fields = ['name', 'email', 'password'];
+
+                for (let key in fields) {
+                    if (!errors.hasOwnProperty(fields[key])) {
+                        this.form.errors[fields[key]] = '';
+
+                        continue;
+                    }
+
+                    this.form.errors[fields[key]] = errors[fields[key]][0] || '';
+                }
+            }
+        },
+
+        watch: {
+            'form.name': function () {
+                this.form.errors.name = '';
+            },
+            'form.email': function () {
+                this.form.errors.email = '';
+            },
+            'form.password': function () {
+                this.form.errors.password = '';
             }
         }
     }

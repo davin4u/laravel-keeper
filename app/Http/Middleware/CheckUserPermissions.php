@@ -16,7 +16,9 @@ class CheckUserPermissions
      */
     public function handle($request, Closure $next)
     {
+        /*
       $route = $request->route()->getName();
+
 
       if (isset(RolesPermissions::$permissions[$route])) {
         $validRoles = RolesPermissions::$permissions[$route];
@@ -24,7 +26,7 @@ class CheckUserPermissions
         if (!auth()->user()->hasRole($validRoles)) {
           return redirect('/home');
         }
-      }
+      }*/
 
       return $next($request);
     }
