@@ -38,7 +38,7 @@
                         ></FormInput>
 
                         <div>
-                            <Button @click.native.prevent="register">Register</Button>
+                            <PrimaryButton @click.native.prevent="register">Register</PrimaryButton>
 
                             <div class="flex text-gray-500 mt-2 text-xs justify-between">
                                 <p>Already a member? <a :href="route('auth.login')" class="hover:underline">Log in</a></p>
@@ -54,14 +54,14 @@
 <script>
     import Panel from "../Layout/Panel";
     import FormInput from "../Layout/FormInput";
-    import Button from "../Layout/Button";
     import Loading from "../Layout/Loading";
     import Error from "../Layout/Error";
+    import PrimaryButton from "../Layout/Buttons/PrimaryButton";
 
     export default {
         name: "RegisterForm",
 
-        components: {Error, Loading, Button, FormInput, Panel},
+        components: {PrimaryButton, Error, Loading, FormInput, Panel},
 
         data() {
             return {

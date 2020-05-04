@@ -1,6 +1,6 @@
 <template>
     <div class="bg-white p-3 shadow">
-        <PanelHeader>
+        <PanelHeader v-if="!noHeader">
             <slot name="header"></slot>
         </PanelHeader>
 
@@ -14,6 +14,13 @@
     export default {
         name: "Panel",
 
-        components: {PanelHeader}
+        components: {PanelHeader},
+
+        props: {
+            noHeader: {
+                type: Boolean,
+                default: false
+            }
+        }
     }
 </script>

@@ -12,62 +12,40 @@ use App\Helpers\UserPermissionsTrait;
 
 class User extends Authenticatable
 {
-  use Notifiable;
-  use UserPermissionsTrait;
+    use Notifiable;
+    use UserPermissionsTrait;
 
-  /**
-   * The attributes that are mass assignable.
-   *
-   * @var array
-   */
-  protected $fillable = [
-    'name', 'email', 'password',
-  ];
+    /**
+    * The attributes that are mass assignable.
+    *
+    * @var array
+    */
+    protected $fillable = [
+        'name', 'email', 'password',
+    ];
 
-  /**
-   * The attributes that should be hidden for arrays.
-   *
-   * @var array
-   */
-  protected $hidden = [
-    'password', 'remember_token',
-  ];
+    /**
+    * The attributes that should be hidden for arrays.
+    *
+    * @var array
+    */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
 
-  public function passwords()
-  {
-    return $this->belongsToMany(Password::class);
-  }
-
-  public function roles()
-  {
-    return $this->belongsToMany(Role::class);
-  }
-
-  public function saveProfile($request)
-  {
-    if ($request->get('password') && $request->get('password') == $request->get('confirm_password')) {
-      $this->update(['password' => \Hash::make($request->get('password'))]);
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function passwordGroups()
+    {
+        return $this->hasMany(PasswordGroup::class);
     }
 
-    if ($request->hasFile('avatar')) {
-      $request->file('avatar')->storeAs('avatars', $this->id . '.' . $request->file('avatar')->extension(), 'public_uploads');
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
     }
-
-    return $this->update([
-      'name' => $request->get('name')
-    ]);
-  }
-
-  public function getAvatarAttribute()
-  {
-    $file = '/images/img.jpg'; // @TODO use gravatar instead of this
-
-    foreach (['.png', '.jpg', '.jpeg'] as $ext) {
-      if (Storage::disk('public_uploads')->exists('avatars/' . $this->id . $ext)) {
-        $file = '/uploads/avatars/' . $this->id . $ext;
-      }
-    }
-
-    return $file;
-  }
 }

@@ -23,7 +23,7 @@
                         ></FormInput>
 
                         <div>
-                            <Button @click.native.prevent="login">Log in</Button>
+                            <PrimaryButton @click.native.prevent="login">Log in</PrimaryButton>
 
                             <div class="flex text-gray-500 mt-2 text-xs justify-between">
                                 <a class="hover:underline" :href="route('auth.restore_password')">Lost your password?</a>
@@ -43,14 +43,14 @@
 <script>
     import Panel from "../Layout/Panel";
     import FormInput from "../Layout/FormInput";
-    import Button from "../Layout/Button";
     import Error from "../Layout/Error";
     import Loading from "../Layout/Loading";
+    import PrimaryButton from "../Layout/Buttons/PrimaryButton";
 
     export default {
         name: "LoginForm",
 
-        components: {Loading, Error, Button, FormInput, Panel},
+        components: {PrimaryButton, Loading, Error, FormInput, Panel},
 
         data() {
             return {

@@ -2,81 +2,79 @@
 
 namespace App\Http\Controllers;
 
-use Validator;
-use Illuminate\Http\Request;
-
+use App\Http\Requests\StoreProjectRequest;
+use App\Http\Resources\UserResource;
 use App\Project;
-use App\Password;
-
-use App\Repositories\PasswordsRepository;
 use App\Repositories\ProjectsRepository;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ProjectsController extends Controller
 {
-    protected $projects;
-    protected $passwords;
+    /**
+     * @var Request
+     */
+    protected $request;
 
-    public function __construct(ProjectsRepository $projects, PasswordsRepository $passwords)
+    /**
+     * @var ProjectsRepository
+     */
+    protected $projects;
+
+    /**
+     * @var \Illuminate\Contracts\Validation\Validator
+     */
+    protected $validator;
+
+    /**
+     * ProjectsController constructor.
+     * @param Request $request
+     * @param ProjectsRepository $projects
+     */
+    public function __construct(Request $request, ProjectsRepository $projects)
     {
-        $this->middleware('auth');
+        $this->request = $request;
 
         $this->projects = $projects;
-        $this->passwords = $passwords;
+
+        $this->validator = $this->makeValidator($this->request->all(), new StoreProjectRequest());
     }
 
-    public function index()
-    {
-        return view('projects.index', [
-            'projects' => $this->projects->all()
-        ]);
-    }
-
-    public function create()
-    {
-        return view('projects.create');
-    }
-
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store()
     {
-        $project = $this->projects->create(request([
-            'name',
-            'url',
-            'short_description',
-            'full_description',
-            'files'
-        ]));
+        if ($this->validator->fails()) {
+            return response()->json([
+                'errors' => $this->validator->errors()->toArray()
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
-        return redirect(route('projects_edit', ['id' => $project->id]));
+        if ($project = $this->projects->create($this->request->all())) {
+            return response()->json([
+                'success' => true,
+                'user' => new UserResource(Auth::user())
+            ], Response::HTTP_OK);
+        }
+
+        return response()->json([
+            'error' => 'Something went wrong. Please contact our support'
+        ], Response::HTTP_BAD_REQUEST);
     }
 
-    public function edit($id)
+    /**
+     * @param array $data
+     * @param FormRequest $requestClass
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    private function makeValidator(array $data, $requestClass)
     {
-        $project = $this->projects->getById($id);
+        $storeProjectRequest = $requestClass;
 
-        return view('projects.edit', [
-            'project' => $project,
-            'files' => $project->files()
-        ]);
+        return Validator::make($data, $storeProjectRequest->rules());
     }
-
-    public function delete($id)
-    {
-        $this->projects->delete($id);
-
-        return redirect('projects');
-    }
-
-    public function update($id)
-    {
-        $this->projects->update($id, request([
-            'name',
-            'url',
-            'short_description',
-            'full_description',
-            'files'
-        ]));
-
-        return redirect('projects');
-    }
-
 }

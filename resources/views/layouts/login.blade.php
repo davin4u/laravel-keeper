@@ -9,8 +9,8 @@
 
         <title>{{ config('app.name', 'Laravel keeper') }}</title>
 
-        <!-- Custom Theme Style -->
         <link href="/css/app.css" rel="stylesheet">
+
         <!-- Scripts -->
         <script>
             window.Laravel = {!! json_encode([

@@ -27,16 +27,12 @@ Auth::routes();
 
 Route::middleware(['auth', 'permissions'])->group(function() {
     Route::get('/home', 'HomeController@index')->name('dashboard');
-    Route::get('/download/{id}', 'HomeController@download')->name('download');
-    Route::get('/delete-file/{id}', 'HomeController@deleteFile')->name('delete_file');
+
+    // Password groups
+    Route::post('/password-groups/store', 'PasswordGroupsController@store')->name('password_groups.store');
 
     //Projects
-    Route::get('/projects', 'ProjectsController@index')->name('projects_index');
-    Route::get('/projects/new', 'ProjectsController@create')->name('projects_create');
-    Route::post('/projects/new', 'ProjectsController@store')->name('projects_store');
-    Route::get('/projects/{id}/edit', 'ProjectsController@edit')->name('projects_edit');
-    Route::get('/projects/{id}/delete', 'ProjectsController@delete')->name('projects_delete');
-    Route::post('/projects/{id}/update', 'ProjectsController@update')->name('projects_update');
+    Route::post('/projects/store', 'ProjectsController@store')->name('projects.store');
 
     Route::get('/projects/{project}/passwords', 'PasswordsController@projectPasswordsList')->name('project_passwords_list');
 

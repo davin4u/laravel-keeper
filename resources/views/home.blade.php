@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+    <App></App>
+  {{--
 <div class="container">
   <div class="row">
     <div class="col-md-6">
@@ -81,21 +83,7 @@
       @endif
     </div>
   </div>
-</div>
+</div>--}}
 @endsection
 
-@section('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
-<script>
-  $(document).ready(function(){
-    $('.view-password-details').on('click', function(){
-      $('.password-details').hide();
-      $('#password-details-' + $(this).attr("data-id")).show();
 
-      return false;
-    });
-
-    new Clipboard('.copy-to-clipboard');
-  });
-</script>
-@endsection

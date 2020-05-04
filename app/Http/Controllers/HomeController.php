@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
+use App\User;
 use Illuminate\Http\Request;
 use App\Repositories\PasswordsRepository;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\File;
 
@@ -24,11 +27,9 @@ class HomeController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index(\App\Repositories\PasswordsRepository $passwords)
+  public function index()
   {
-    return view('home', [
-      'lastViewed' => $passwords->getLastViewed()
-    ]);
+      return view('home');
   }
 
   public function download($id)
