@@ -80930,3 +80930,6 @@ video {
     transition-delay: 1000ms
   }
 }
+.app-full-height {
+  height: calc(100vh - 80px);
+}

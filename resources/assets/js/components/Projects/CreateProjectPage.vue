@@ -33,7 +33,7 @@
 
 <script>
     import Loading from "../Layout/Loading";
-    import FormInput from "../Layout/FormInput";
+    import FormInput from "../Layout/Form/FormInput";
     import Error from "../Layout/Error";
     import PrimaryButton from "../Layout/Buttons/PrimaryButton";
 

@@ -22,7 +22,7 @@
 </head>
 <body class="bg-gray-200">
     <div id="app">
-        <div class="w-full">
+        <div class="w-full app-full-height">
             @yield('content')
         </div>
     </div>

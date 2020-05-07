@@ -22,16 +22,15 @@
 
 <script>
     import PrimaryButton from "../Layout/Buttons/PrimaryButton";
-    import DangerButton from "../Layout/Buttons/DangerButton";
 
     export default {
         name: "ProjectsPage",
 
-        components: {DangerButton, PrimaryButton},
+        components: {PrimaryButton},
 
         computed: {
             projects() {
-                return _.get(this.$store.state.user, ['projects'], []);
+                return _.get(this.$store.state.user, ['projects', 'data'], []);
             }
         },
 

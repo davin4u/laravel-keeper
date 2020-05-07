@@ -42,7 +42,7 @@
 
 <script>
     import Panel from "../Layout/Panel";
-    import FormInput from "../Layout/FormInput";
+    import FormInput from "../Layout/Form/FormInput";
     import Error from "../Layout/Error";
     import Loading from "../Layout/Loading";
     import PrimaryButton from "../Layout/Buttons/PrimaryButton";

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Resources\UserResource;
-use App\Project;
 use App\Repositories\ProjectsRepository;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
@@ -73,8 +72,6 @@ class ProjectsController extends Controller
      */
     private function makeValidator(array $data, $requestClass)
     {
-        $storeProjectRequest = $requestClass;
-
-        return Validator::make($data, $storeProjectRequest->rules());
+        return Validator::make($data, $requestClass->rules());
     }
 }

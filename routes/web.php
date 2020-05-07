@@ -34,16 +34,9 @@ Route::middleware(['auth', 'permissions'])->group(function() {
     //Projects
     Route::post('/projects/store', 'ProjectsController@store')->name('projects.store');
 
-    Route::get('/projects/{project}/passwords', 'PasswordsController@projectPasswordsList')->name('project_passwords_list');
-
     //Passwords
-    Route::get('/passwords', 'PasswordsController@index')->name('passwords_index');
+    Route::post('/passwords/store', 'PasswordsController@store')->name('passwords.store');
 
-    Route::get('/passwords/new', 'PasswordsController@create')->name('passwords_create');
-    Route::post('/passwords/new', 'PasswordsController@store')->name('passwords_store');
-    Route::get('/passwords/{id}/edit', 'PasswordsController@edit')->name('passwords_edit');
-    Route::get('/passwords/{id}/delete', 'PasswordsController@delete')->name('passwords_delete');
-    Route::post('/passwords/{id}/update', 'PasswordsController@update')->name('passwords_update');
 
     //Settings
     Route::get('/settings/password-types', 'SettingsController@index')->name('settings_index');

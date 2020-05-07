@@ -1,17 +1,15 @@
 <template>
     <div class="mb-2">
-        <input
-                class="w-full border  p-2"
+        <textarea
+                class="w-full h-40 border p-2 outline-none"
                 :class="{
                     'border-gray-200': !error,
                     'border-red-600': error
                 }"
                 :name="name"
-                :type="type"
                 :placeholder="placeholder"
-                :value="value"
                 v-model="inputValue"
-        />
+        >{{ value }}</textarea>
 
         <div v-if="error" class="mt-2 text-xs text-red-600 font-bold">
             {{ error }}
@@ -21,16 +19,12 @@
 
 <script>
     export default {
-        name: "FormInput",
+        name: "FormTextArea",
 
         props: {
             name: {
                 type: String,
                 default: ''
-            },
-            type: {
-                type: String,
-                default: 'text'
             },
             placeholder: {
                 type: String,

@@ -5,3 +5,7 @@
 @import "~tailwindcss/components.css";
 
 @import "~tailwindcss/utilities.css";
+
+.app-full-height {
+  height: calc(100vh - 80px);
+}

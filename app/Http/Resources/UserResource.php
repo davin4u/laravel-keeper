@@ -22,7 +22,8 @@ class UserResource extends JsonResource
 
         if ($this->id === Auth::user()->id) {
             $data['password_groups'] = $this->passwordGroups;
-            $data['projects'] = $this->projects;
+            $data['projects'] = new ProjectsCollection($this->projects);
+            $data['passwords'] = new PasswordsCollection($this->passwords);
         }
 
         return $data;

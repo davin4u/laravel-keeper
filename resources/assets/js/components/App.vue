@@ -2,7 +2,7 @@
     <div class="container h-full mx-auto">
         <AppHeader></AppHeader>
 
-        <div class="flex w-full">
+        <div class="flex w-full h-full">
             <div class="w-1/4">
                 <AppSideMenu></AppSideMenu>
             </div>
@@ -30,7 +30,8 @@
             let data = {
                 sideMenuItems: [
                     {name: 'Dashboard', screen: 'dashboard'},
-                    {name: 'Projects', screen: 'projects'}
+                    {name: 'Projects', screen: 'projects'},
+                    {name: 'Passwords', screen: 'passwords'}
                 ]
             };
 

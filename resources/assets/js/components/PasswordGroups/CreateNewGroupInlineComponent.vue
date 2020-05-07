@@ -25,7 +25,7 @@
 
 <script>
     import PlusIcon from "../Icons/PlusIcon";
-    import FormInput from "../Layout/FormInput";
+    import FormInput from "../Layout/Form/FormInput";
     import PrimaryButton from "../Layout/Buttons/PrimaryButton";
     import DangerButton from "../Layout/Buttons/DangerButton";
 

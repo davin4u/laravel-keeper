@@ -2,104 +2,84 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Project;
-use App\Password;
-use App\PasswordType;
-use App\User;
-
+use App\Http\Requests\StorePasswordRequest;
+use App\Http\Resources\UserResource;
 use App\Repositories\PasswordsRepository;
-use App\Repositories\ProjectsRepository;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
+/**
+ * Class PasswordsController
+ * @package App\Http\Controllers
+ */
 class PasswordsController extends Controller
 {
-  protected $projects;
-  protected $passwords;
+    /**
+     * @var Request
+     */
+    protected $request;
 
-  public function __construct(ProjectsRepository $projects, PasswordsRepository $passwords)
-  {
-    $this->middleware('auth');
+    /**
+     * @var \Illuminate\Contracts\Validation\Validator
+     */
+    protected $validator;
 
-    $this->projects = $projects;
-    $this->passwords = $passwords;
-  }
+    /**
+     * @var PasswordsRepository
+     */
+    protected $passwords;
 
-  public function index()
-  {
-    return view('passwords.index', [
-      'passwords' => $this->passwords->all()
-    ]);
-  }
+    /**
+     * PasswordsController constructor.
+     * @param Request $request
+     * @param PasswordsRepository $passwords
+     */
+    public function __construct(Request $request, PasswordsRepository $passwords)
+    {
+        $this->request = $request;
 
-  public function projectPasswordsList(Project $project)
-  {
-    return view('passwords.index', [
-      'passwords' => $this->passwords->getProjectPasswords($project->id),
-      'project' => $project
-    ]);
-  }
+        $this->passwords = $passwords;
 
-  public function create()
-  {
-    return view('passwords.create', [
-      'projects' => $this->projects->all(),
-      'password_types' => PasswordType::all()
-    ]);
-  }
-
-  public function store()
-  {
-    $password = $this->passwords->create(request([
-      'project_id',
-      'type',
-      'name',
-      'username',
-      'password',
-      'full_description',
-      'files'
-    ]));
-
-    return redirect(route('passwords_edit', ['id' => $password->id]));
-  }
-
-  public function edit($id)
-  {
-    $password = $this->passwords->getById($id);
-
-    if (is_object($password)) {
-      $password->updateViewed();
+        $this->validator = $this->makeValidator($this->request->all(), new StorePasswordRequest());
     }
 
-    return view('passwords.edit', [
-      'projects' => $this->projects->all(),
-      'password' => $password,
-      'password_types' => PasswordType::all(),
-      'users' => $password->user_id == auth()->user()->id ? User::where('id', '<>', auth()->user()->id)->get() : [],
-      'files' => $password->files()
-    ]);
-  }
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store()
+    {
+        if ($this->validator->fails()) {
+            return response()->json([
+                'errors' => $this->validator->errors()->toArray()
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
-  public function update($id)
-  {
-    $this->passwords->update($id, request([
-      'project_id',
-      'type',
-      'name',
-      'username',
-      'password',
-      'full_description',
-      'share_with',
-      'files'
-    ]));
+        if ($password = $this->passwords->create($this->request->all())) {
+            return response()->json([
+                'success' => true,
+                'user' => new UserResource(Auth::user())
+            ], Response::HTTP_OK);
+        }
 
-    return redirect('passwords');
-  }
+        return response()->json([
+            'error' => 'Something went wrong. Please contact our support'
+        ], Response::HTTP_BAD_REQUEST);
+    }
 
-  public function delete($id)
-  {
-    $this->passwords->delete($id);
+    /**
+     * @param array $data
+     * @param FormRequest $requestClass
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    private function makeValidator(array $data, $requestClass)
+    {
+        $data = array_filter($data, function ($item) {
+            return (bool) $item;
+        });
 
-    return redirect('passwords');
-  }
+        return Validator::make($data, $requestClass->rules());
+    }
 }

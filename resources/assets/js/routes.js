@@ -10,5 +10,6 @@ export const routes = {
     'projects.store': '/projects/store',
 
     //passwords
-    'passwords.create': '/passwords/create'
+    'passwords.create': '/passwords/create',
+    'passwords.store': '/passwords/store'
 };
