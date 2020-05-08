@@ -99,6 +99,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _AppHeader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AppHeader */ "./resources/assets/js/components/AppHeader.vue");
 /* harmony import */ var _AppSideMenu__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AppSideMenu */ "./resources/assets/js/components/AppSideMenu.vue");
 /* harmony import */ var _AppContentSection__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./AppContentSection */ "./resources/assets/js/components/AppContentSection.vue");
+/* harmony import */ var _mixins_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../mixins/user */ "./resources/assets/js/mixins/user.js");
 //
 //
 //
@@ -115,6 +116,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -127,6 +129,7 @@ __webpack_require__.r(__webpack_exports__);
     AppHeader: _AppHeader__WEBPACK_IMPORTED_MODULE_1__["default"],
     Panel: _Layout_Panel__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
+  mixins: [_mixins_user__WEBPACK_IMPORTED_MODULE_4__["user"]],
   mounted: function mounted() {
     // set side menu items
     var data = {
@@ -141,10 +144,11 @@ __webpack_require__.r(__webpack_exports__);
         screen: 'passwords'
       }]
     };
+    var userGroups = this.user().getPasswordGroups();
 
-    if (!_.isUndefined(this.$store.state.user) && !_.isUndefined(this.$store.state.user.password_groups)) {
-      for (var key in this.$store.state.user.password_groups) {
-        var passwordGroup = this.$store.state.user.password_groups[key];
+    if (userGroups.length > 0) {
+      for (var key in userGroups) {
+        var passwordGroup = userGroups[key];
         data.sideMenuItems.push({
           name: passwordGroup.name,
           screen: 'passwords#password-group:' + passwordGroup.id
@@ -175,6 +179,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Projects_ProjectsPage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Projects/ProjectsPage */ "./resources/assets/js/components/Projects/ProjectsPage.vue");
 /* harmony import */ var _Projects_CreateProjectPage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Projects/CreateProjectPage */ "./resources/assets/js/components/Projects/CreateProjectPage.vue");
 /* harmony import */ var _Passwords_PasswordsPage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Passwords/PasswordsPage */ "./resources/assets/js/components/Passwords/PasswordsPage.vue");
+/* harmony import */ var _Passwords_EditPasswordPage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Passwords/EditPasswordPage */ "./resources/assets/js/components/Passwords/EditPasswordPage.vue");
 //
 //
 //
@@ -187,6 +192,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -200,7 +206,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     currentScreenComponent: function currentScreenComponent() {
-      switch (this.$store.state.screen) {
+      var screenState = this.$store.state.screen || '';
+
+      if (screenState.indexOf('#') !== -1) {
+        screenState = screenState.split('#')[0];
+      }
+
+      switch (screenState) {
         case 'dashboard':
           return _Dashboard_DashboardPage__WEBPACK_IMPORTED_MODULE_1__["default"];
         // passwords
@@ -210,6 +222,9 @@ __webpack_require__.r(__webpack_exports__);
 
         case 'passwords.create':
           return _Passwords_CreatePasswordPage__WEBPACK_IMPORTED_MODULE_2__["default"];
+
+        case 'passwords.edit':
+          return _Passwords_EditPasswordPage__WEBPACK_IMPORTED_MODULE_6__["default"];
         // projects
 
         case 'projects':
@@ -222,8 +237,30 @@ __webpack_require__.r(__webpack_exports__);
           return null;
       }
     },
+    componentOptions: function componentOptions() {
+      var screenState = this.$store.state.screen || '';
+
+      if (screenState.indexOf('#') !== -1) {
+        var optionsString = screenState.split('#')[1] || '';
+
+        if (optionsString.indexOf(':') !== -1) {
+          var options = {};
+          var parsed = optionsString.split(':');
+          options[parsed[0]] = parsed[1];
+          return options;
+        }
+      }
+
+      return {};
+    },
     currentScreenTitle: function currentScreenTitle() {
-      switch (this.$store.state.screen) {
+      var screenState = this.$store.state.screen || '';
+
+      if (screenState.indexOf('#') !== -1) {
+        screenState = screenState.split('#')[0];
+      }
+
+      switch (screenState) {
         case 'dashboard':
           return 'Dashboard';
         // passwords
@@ -233,6 +270,9 @@ __webpack_require__.r(__webpack_exports__);
 
         case 'passwords.create':
           return 'Create new password';
+
+        case 'passwords.edit':
+          return 'Edit password';
         // projects
 
         case 'projects':
@@ -950,6 +990,9 @@ __webpack_require__.r(__webpack_exports__);
     this.inputValue = this.value;
   },
   watch: {
+    'value': function value() {
+      this.inputValue = this.value;
+    },
     'inputValue': function inputValue() {
       this.$emit('input', this.inputValue);
     }
@@ -1036,6 +1079,9 @@ __webpack_require__.r(__webpack_exports__);
     this.inputValue = parseInt(this.value);
   },
   watch: {
+    'value': function value() {
+      this.inputValue = parseInt(this.value);
+    },
     'inputValue': function inputValue() {
       this.$emit('input', parseInt(this.inputValue));
     }
@@ -1101,6 +1147,9 @@ __webpack_require__.r(__webpack_exports__);
     this.inputValue = this.value;
   },
   watch: {
+    'value': function value() {
+      this.inputValue = this.value;
+    },
     'inputValue': function inputValue() {
       this.$emit('input', this.inputValue);
     }
@@ -1300,6 +1349,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layout_Buttons_PrimaryButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Layout/Buttons/PrimaryButton */ "./resources/assets/js/components/Layout/Buttons/PrimaryButton.vue");
 /* harmony import */ var _Layout_Form_FormSelect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Layout/Form/FormSelect */ "./resources/assets/js/components/Layout/Form/FormSelect.vue");
 /* harmony import */ var _Layout_Form_FormTextArea__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Layout/Form/FormTextArea */ "./resources/assets/js/components/Layout/Form/FormTextArea.vue");
+/* harmony import */ var _mixins_user__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../mixins/user */ "./resources/assets/js/mixins/user.js");
 //
 //
 //
@@ -1357,11 +1407,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
+
 
 
 
@@ -1378,6 +1424,7 @@ __webpack_require__.r(__webpack_exports__);
     Loading: _Layout_Loading__WEBPACK_IMPORTED_MODULE_1__["default"],
     Error: _Layout_Error__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
+  mixins: [_mixins_user__WEBPACK_IMPORTED_MODULE_6__["user"]],
   data: function data() {
     return {
       loading: false,
@@ -1401,8 +1448,7 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     projects: function projects() {
       var items = [];
-
-      var userProjects = _.get(this.$store.state.user, ['projects', 'data'], []);
+      var userProjects = this.user().getProjects();
 
       if (userProjects.length > 0) {
         for (var k in userProjects) {
@@ -1417,8 +1463,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     groups: function groups() {
       var items = [];
-
-      var userGroups = _.get(this.$store.state.user, ['password_groups'], []);
+      var userGroups = this.user().getPasswordGroups();
 
       if (userGroups.length > 0) {
         for (var k in userGroups) {
@@ -1479,6 +1524,230 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Passwords/EditPasswordPage.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/Passwords/EditPasswordPage.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Layout_Error__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Layout/Error */ "./resources/assets/js/components/Layout/Error.vue");
+/* harmony import */ var _Layout_Loading__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Layout/Loading */ "./resources/assets/js/components/Layout/Loading.vue");
+/* harmony import */ var _Layout_Form_FormSelect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Layout/Form/FormSelect */ "./resources/assets/js/components/Layout/Form/FormSelect.vue");
+/* harmony import */ var _Layout_Form_FormInput__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Layout/Form/FormInput */ "./resources/assets/js/components/Layout/Form/FormInput.vue");
+/* harmony import */ var _Layout_Form_FormTextArea__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Layout/Form/FormTextArea */ "./resources/assets/js/components/Layout/Form/FormTextArea.vue");
+/* harmony import */ var _Layout_Buttons_PrimaryButton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Layout/Buttons/PrimaryButton */ "./resources/assets/js/components/Layout/Buttons/PrimaryButton.vue");
+/* harmony import */ var _mixins_user__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../mixins/user */ "./resources/assets/js/mixins/user.js");
+/* harmony import */ var _Layout_Buttons_DangerButton__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Layout/Buttons/DangerButton */ "./resources/assets/js/components/Layout/Buttons/DangerButton.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "EditPasswordPage",
+  components: {
+    DangerButton: _Layout_Buttons_DangerButton__WEBPACK_IMPORTED_MODULE_7__["default"],
+    PrimaryButton: _Layout_Buttons_PrimaryButton__WEBPACK_IMPORTED_MODULE_5__["default"],
+    FormTextArea: _Layout_Form_FormTextArea__WEBPACK_IMPORTED_MODULE_4__["default"],
+    FormInput: _Layout_Form_FormInput__WEBPACK_IMPORTED_MODULE_3__["default"],
+    FormSelect: _Layout_Form_FormSelect__WEBPACK_IMPORTED_MODULE_2__["default"],
+    Loading: _Layout_Loading__WEBPACK_IMPORTED_MODULE_1__["default"],
+    Error: _Layout_Error__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  mixins: [_mixins_user__WEBPACK_IMPORTED_MODULE_6__["user"]],
+  props: ['options'],
+  data: function data() {
+    return {
+      loading: true,
+      error: '',
+      form: {
+        project_id: 0,
+        group_id: 0,
+        name: '',
+        username: '',
+        password: '',
+        full_description: '',
+        errors: {
+          name: '',
+          username: '',
+          password: '',
+          full_description: ''
+        }
+      }
+    };
+  },
+  computed: {
+    passwordId: function passwordId() {
+      return _.get(this.options, ['id'], null);
+    },
+    projects: function projects() {
+      var items = [];
+      var userProjects = this.user().getProjects();
+
+      if (userProjects.length > 0) {
+        for (var k in userProjects) {
+          items.push({
+            name: userProjects[k].name,
+            value: userProjects[k].id
+          });
+        }
+      }
+
+      return items;
+    },
+    groups: function groups() {
+      var items = [];
+      var userGroups = this.user().getPasswordGroups();
+
+      if (userGroups.length > 0) {
+        for (var k in userGroups) {
+          items.push({
+            name: userGroups[k].name,
+            value: userGroups[k].id
+          });
+        }
+      }
+
+      return items;
+    }
+  },
+  methods: {
+    cancel: function cancel() {
+      this.$store.commit('changeScreen', 'passwords');
+    },
+    update: function update() {
+      var _this = this;
+
+      this.loading = true;
+      var data = {
+        project_id: this.form.project_id,
+        group_id: this.form.group_id,
+        name: this.form.name,
+        username: this.form.username,
+        password: this.form.password,
+        full_description: this.form.full_description
+      };
+      this.http().post(this.route('passwords.update', {
+        id: this.passwordId
+      }), data).then(function (response) {
+        _this.loading = false;
+
+        _this.processResponse(response);
+      })["catch"](function () {
+        _this.loading = false;
+        _this.error = 'Something went wrong. Please contact our support.';
+      });
+    },
+    processResponse: function processResponse(response) {
+      this.processErrors(response.errors || {});
+
+      if (!_.isUndefined(response.user) && response.success === true) {
+        this.$store.commit('setUser', response.user);
+        this.$store.commit('changeScreen', 'passwords');
+      }
+    },
+    processErrors: function processErrors(errors) {
+      var fields = ['name', 'username', 'password', 'full_description'];
+
+      for (var key in fields) {
+        if (!errors.hasOwnProperty(fields[key])) {
+          this.form.errors[fields[key]] = '';
+          continue;
+        }
+
+        this.form.errors[fields[key]] = errors[fields[key]][0] || '';
+      }
+    }
+  },
+  mounted: function mounted() {
+    var _this2 = this;
+
+    if (!_.isNull(this.passwordId)) {
+      this.http().get(this.route('passwords.get', {
+        id: this.passwordId
+      })).then(function (response) {
+        _this2.loading = false;
+
+        if (!_.isUndefined(response) && !_.isUndefined(response.data)) {
+          _this2.form.project_id = _.get(response, ['data', 'project', 'id'], 0);
+          _this2.form.group_id = _.get(response, ['data', 'group_id'], 0);
+          _this2.form.name = _.get(response, ['data', 'name'], '');
+          _this2.form.username = _.get(response, ['data', 'username'], '');
+          _this2.form.password = _.get(response, ['data', 'decrypted_password'], '');
+          _this2.form.full_description = _.get(response, ['data', 'full_description'], '');
+        }
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Passwords/PasswordsPage.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/Passwords/PasswordsPage.vue?vue&type=script&lang=js& ***!
@@ -1490,6 +1759,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layout_Buttons_PrimaryButton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Layout/Buttons/PrimaryButton */ "./resources/assets/js/components/Layout/Buttons/PrimaryButton.vue");
 /* harmony import */ var _Layout_Buttons_DangerButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Layout/Buttons/DangerButton */ "./resources/assets/js/components/Layout/Buttons/DangerButton.vue");
+/* harmony import */ var _mixins_user__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../mixins/user */ "./resources/assets/js/mixins/user.js");
 //
 //
 //
@@ -1532,6 +1802,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1540,15 +1811,20 @@ __webpack_require__.r(__webpack_exports__);
     DangerButton: _Layout_Buttons_DangerButton__WEBPACK_IMPORTED_MODULE_1__["default"],
     PrimaryButton: _Layout_Buttons_PrimaryButton__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
+  mixins: [_mixins_user__WEBPACK_IMPORTED_MODULE_2__["user"]],
   computed: {
     passwords: function passwords() {
-      return _.get(this.$store.state.user, ['passwords', 'data'], []);
+      return this.user().getPasswords();
     }
   },
   methods: {
     create: function create() {
       this.$store.commit('changeScreen', 'passwords.create');
-    }
+    },
+    edit: function edit(password) {
+      this.$store.commit('changeScreen', 'passwords.edit#id:' + password.id);
+    },
+    deletePassword: function deletePassword(password) {}
   }
 });
 
@@ -1687,6 +1963,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layout_Buttons_PrimaryButton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Layout/Buttons/PrimaryButton */ "./resources/assets/js/components/Layout/Buttons/PrimaryButton.vue");
+/* harmony import */ var _mixins_user__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../mixins/user */ "./resources/assets/js/mixins/user.js");
 //
 //
 //
@@ -1710,14 +1987,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ProjectsPage",
   components: {
     PrimaryButton: _Layout_Buttons_PrimaryButton__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
+  mixins: [_mixins_user__WEBPACK_IMPORTED_MODULE_1__["user"]],
   computed: {
     projects: function projects() {
-      return _.get(this.$store.state.user, ['projects', 'data'], []);
+      return this.user().getProjects();
     }
   },
   methods: {
@@ -20074,7 +20353,12 @@ var render = function() {
       {
         key: "body",
         fn: function() {
-          return [_c(_vm.currentScreenComponent, { tag: "component" })]
+          return [
+            _c(_vm.currentScreenComponent, {
+              tag: "component",
+              attrs: { options: _vm.componentOptions }
+            })
+          ]
         },
         proxy: true
       }
@@ -21434,12 +21718,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    {
-      staticClass: "relative",
-      class: {
-        "h-64": _vm.loading
-      }
-    },
+    { staticClass: "relative" },
     [
       _vm.error ? _c("Error", [_vm._v(_vm._s(_vm.error))]) : _vm._e(),
       _vm._v(" "),
@@ -21589,6 +21868,186 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Passwords/EditPasswordPage.vue?vue&type=template&id=36770502&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/Passwords/EditPasswordPage.vue?vue&type=template&id=36770502& ***!
+  \************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "relative" },
+    [
+      _vm.error ? _c("Error", [_vm._v(_vm._s(_vm.error))]) : _vm._e(),
+      _vm._v(" "),
+      _vm.loading ? _c("Loading") : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "form",
+        {
+          attrs: {
+            role: "form",
+            method: "POST",
+            action: _vm.route("passwords.store")
+          }
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "flex" },
+            [
+              _c("FormSelect", {
+                staticClass: "w-1/2 mr-1",
+                attrs: {
+                  name: "project_id",
+                  placeholder: "Project",
+                  options: _vm.projects
+                },
+                model: {
+                  value: _vm.form.project_id,
+                  callback: function($$v) {
+                    _vm.$set(_vm.form, "project_id", $$v)
+                  },
+                  expression: "form.project_id"
+                }
+              }),
+              _vm._v(" "),
+              _c("FormSelect", {
+                staticClass: "w-1/2 ml-1",
+                attrs: {
+                  name: "group_id",
+                  placeholder: "Password group",
+                  options: _vm.groups
+                },
+                model: {
+                  value: _vm.form.group_id,
+                  callback: function($$v) {
+                    _vm.$set(_vm.form, "group_id", $$v)
+                  },
+                  expression: "form.group_id"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("FormInput", {
+            attrs: {
+              name: "name",
+              type: "text",
+              placeholder: "Password name",
+              error: _vm.form.errors.name
+            },
+            model: {
+              value: _vm.form.name,
+              callback: function($$v) {
+                _vm.$set(_vm.form, "name", $$v)
+              },
+              expression: "form.name"
+            }
+          }),
+          _vm._v(" "),
+          _c("FormInput", {
+            attrs: {
+              name: "username",
+              type: "text",
+              placeholder: "Username",
+              error: _vm.form.errors.username
+            },
+            model: {
+              value: _vm.form.username,
+              callback: function($$v) {
+                _vm.$set(_vm.form, "username", $$v)
+              },
+              expression: "form.username"
+            }
+          }),
+          _vm._v(" "),
+          _c("FormInput", {
+            attrs: {
+              name: "password",
+              type: "password",
+              placeholder: "Password",
+              error: _vm.form.errors.password
+            },
+            model: {
+              value: _vm.form.password,
+              callback: function($$v) {
+                _vm.$set(_vm.form, "password", $$v)
+              },
+              expression: "form.password"
+            }
+          }),
+          _vm._v(" "),
+          _c("FormTextArea", {
+            attrs: {
+              name: "full_description",
+              placeholder: "Password description",
+              error: _vm.form.errors.full_description
+            },
+            model: {
+              value: _vm.form.full_description,
+              callback: function($$v) {
+                _vm.$set(_vm.form, "full_description", $$v)
+              },
+              expression: "form.full_description"
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "div",
+            [
+              _c(
+                "PrimaryButton",
+                {
+                  nativeOn: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.update($event)
+                    }
+                  }
+                },
+                [_vm._v("Save")]
+              ),
+              _vm._v(" "),
+              _c(
+                "DangerButton",
+                {
+                  nativeOn: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.cancel($event)
+                    }
+                  }
+                },
+                [_vm._v("Cancel")]
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Passwords/PasswordsPage.vue?vue&type=template&id=07aa4149&":
 /*!*********************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/Passwords/PasswordsPage.vue?vue&type=template&id=07aa4149& ***!
@@ -21652,13 +22111,33 @@ var render = function() {
                 "div",
                 { staticClass: "p-2 w-1/5 text-right self-center" },
                 [
-                  _c("PrimaryButton", { attrs: { size: "sm" } }, [
-                    _vm._v("edit")
-                  ]),
+                  _c(
+                    "PrimaryButton",
+                    {
+                      attrs: { size: "sm" },
+                      nativeOn: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.edit(password)
+                        }
+                      }
+                    },
+                    [_vm._v("edit")]
+                  ),
                   _vm._v(" "),
-                  _c("DangerButton", { attrs: { size: "sm" } }, [
-                    _vm._v("delete")
-                  ])
+                  _c(
+                    "DangerButton",
+                    {
+                      attrs: { size: "sm" },
+                      nativeOn: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          return _vm.deletePassword(password)
+                        }
+                      }
+                    },
+                    [_vm._v("delete")]
+                  )
                 ],
                 1
               )
@@ -35149,6 +35628,53 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./resources/assets/js/User.js":
+/*!*************************************!*\
+  !*** ./resources/assets/js/User.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return User; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var User = /*#__PURE__*/function () {
+  function User(user) {
+    _classCallCheck(this, User);
+
+    this.user = user;
+  }
+
+  _createClass(User, [{
+    key: "getPasswordGroups",
+    value: function getPasswordGroups() {
+      return _.get(this.user, ['password_groups'], []);
+    }
+  }, {
+    key: "getProjects",
+    value: function getProjects() {
+      return _.get(this.user, ['projects', 'data'], []);
+    }
+  }, {
+    key: "getPasswords",
+    value: function getPasswords() {
+      return _.get(this.user, ['passwords', 'data'], []);
+    }
+  }]);
+
+  return User;
+}();
+
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/app.js":
 /*!************************************!*\
   !*** ./resources/assets/js/app.js ***!
@@ -35158,16 +35684,15 @@ module.exports = function(module) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/App */ "./resources/assets/js/components/App.vue");
+/* harmony import */ var _User__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./User */ "./resources/assets/js/User.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _components_Auth_LoginForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Auth/LoginForm */ "./resources/assets/js/components/Auth/LoginForm.vue");
-/* harmony import */ var _components_Auth_RegisterForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Auth/RegisterForm */ "./resources/assets/js/components/Auth/RegisterForm.vue");
-/* harmony import */ var _mixins_routex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./mixins/routex */ "./resources/assets/js/mixins/routex.js");
-/* harmony import */ var _mixins_http__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mixins/http */ "./resources/assets/js/mixins/http.js");
-
-
+/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/App */ "./resources/assets/js/components/App.vue");
+/* harmony import */ var _components_Auth_LoginForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Auth/LoginForm */ "./resources/assets/js/components/Auth/LoginForm.vue");
+/* harmony import */ var _components_Auth_RegisterForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Auth/RegisterForm */ "./resources/assets/js/components/Auth/RegisterForm.vue");
+/* harmony import */ var _mixins_routex__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./mixins/routex */ "./resources/assets/js/mixins/routex.js");
+/* harmony import */ var _mixins_http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./mixins/http */ "./resources/assets/js/mixins/http.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/assets/js/bootstrap.js");
 
 
@@ -35176,16 +35701,18 @@ __webpack_require__(/*! ./bootstrap */ "./resources/assets/js/bootstrap.js");
 
 
 
+
+
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_2__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.mixin(_mixins_routex__WEBPACK_IMPORTED_MODULE_5__["routex"]);
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.mixin(_mixins_http__WEBPACK_IMPORTED_MODULE_6__["http"]);
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.mixin(_mixins_routex__WEBPACK_IMPORTED_MODULE_6__["routex"]);
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.mixin(_mixins_http__WEBPACK_IMPORTED_MODULE_7__["http"]);
 window.Events = new vue__WEBPACK_IMPORTED_MODULE_1___default.a();
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('loginform', _components_Auth_LoginForm__WEBPACK_IMPORTED_MODULE_3__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('registerform', _components_Auth_RegisterForm__WEBPACK_IMPORTED_MODULE_4__["default"]);
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('app', _components_App__WEBPACK_IMPORTED_MODULE_0__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('loginform', _components_Auth_LoginForm__WEBPACK_IMPORTED_MODULE_4__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('registerform', _components_Auth_RegisterForm__WEBPACK_IMPORTED_MODULE_5__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_1___default.a.component('app', _components_App__WEBPACK_IMPORTED_MODULE_3__["default"]);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   state: {
-    user: window.Laravel.user || {},
+    user: new _User__WEBPACK_IMPORTED_MODULE_0__["default"](window.Laravel.user || {}),
     screen: null,
     pageData: {
       sideMenuItems: []
@@ -35193,7 +35720,7 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__["default"].Store({
   },
   mutations: {
     setUser: function setUser(state, user) {
-      state.user = user;
+      state.user = new _User__WEBPACK_IMPORTED_MODULE_0__["default"](user);
     },
     changeScreen: function changeScreen(state, screen) {
       state.screen = screen;
@@ -35210,8 +35737,8 @@ window.$vueApp = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   el: '#app',
   data: {},
   components: {
-    LoginForm: _components_Auth_LoginForm__WEBPACK_IMPORTED_MODULE_3__["default"],
-    RegisterForm: _components_Auth_RegisterForm__WEBPACK_IMPORTED_MODULE_4__["default"]
+    LoginForm: _components_Auth_LoginForm__WEBPACK_IMPORTED_MODULE_4__["default"],
+    RegisterForm: _components_Auth_RegisterForm__WEBPACK_IMPORTED_MODULE_5__["default"]
   }
 });
 
@@ -36926,6 +37453,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/Passwords/EditPasswordPage.vue":
+/*!***********************************************************************!*\
+  !*** ./resources/assets/js/components/Passwords/EditPasswordPage.vue ***!
+  \***********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _EditPasswordPage_vue_vue_type_template_id_36770502___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EditPasswordPage.vue?vue&type=template&id=36770502& */ "./resources/assets/js/components/Passwords/EditPasswordPage.vue?vue&type=template&id=36770502&");
+/* harmony import */ var _EditPasswordPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditPasswordPage.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/Passwords/EditPasswordPage.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _EditPasswordPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _EditPasswordPage_vue_vue_type_template_id_36770502___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _EditPasswordPage_vue_vue_type_template_id_36770502___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/components/Passwords/EditPasswordPage.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Passwords/EditPasswordPage.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************!*\
+  !*** ./resources/assets/js/components/Passwords/EditPasswordPage.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditPasswordPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditPasswordPage.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Passwords/EditPasswordPage.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditPasswordPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Passwords/EditPasswordPage.vue?vue&type=template&id=36770502&":
+/*!******************************************************************************************************!*\
+  !*** ./resources/assets/js/components/Passwords/EditPasswordPage.vue?vue&type=template&id=36770502& ***!
+  \******************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditPasswordPage_vue_vue_type_template_id_36770502___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditPasswordPage.vue?vue&type=template&id=36770502& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Passwords/EditPasswordPage.vue?vue&type=template&id=36770502&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditPasswordPage_vue_vue_type_template_id_36770502___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditPasswordPage_vue_vue_type_template_id_36770502___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/Passwords/PasswordsPage.vue":
 /*!********************************************************************!*\
   !*** ./resources/assets/js/components/Passwords/PasswordsPage.vue ***!
@@ -37245,6 +37841,26 @@ var routex = {
 
 /***/ }),
 
+/***/ "./resources/assets/js/mixins/user.js":
+/*!********************************************!*\
+  !*** ./resources/assets/js/mixins/user.js ***!
+  \********************************************/
+/*! exports provided: user */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "user", function() { return user; });
+var user = {
+  methods: {
+    user: function user() {
+      return this.$store.state.user;
+    }
+  }
+};
+
+/***/ }),
+
 /***/ "./resources/assets/js/routes.js":
 /*!***************************************!*\
   !*** ./resources/assets/js/routes.js ***!
@@ -37265,7 +37881,9 @@ var routes = {
   'projects.store': '/projects/store',
   //passwords
   'passwords.create': '/passwords/create',
-  'passwords.store': '/passwords/store'
+  'passwords.store': '/passwords/store',
+  'passwords.get': '/passwords/{id}',
+  'passwords.update': '/passwords/{id}/update'
 };
 
 /***/ }),

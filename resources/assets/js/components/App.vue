@@ -19,11 +19,14 @@
     import AppHeader from "./AppHeader";
     import AppSideMenu from "./AppSideMenu";
     import AppContentSection from "./AppContentSection";
+    import {user} from "../mixins/user";
 
     export default {
         name: "App",
 
         components: {AppContentSection, AppSideMenu, AppHeader, Panel},
+
+        mixins: [user],
 
         mounted() {
             // set side menu items
@@ -35,9 +38,11 @@
                 ]
             };
 
-            if (!_.isUndefined(this.$store.state.user) && !_.isUndefined(this.$store.state.user.password_groups)) {
-                for (let key in this.$store.state.user.password_groups) {
-                    let passwordGroup = this.$store.state.user.password_groups[key];
+            let userGroups = this.user().getPasswordGroups();
+
+            if (userGroups.length > 0) {
+                for (let key in userGroups) {
+                    let passwordGroup = userGroups[key];
 
                     data.sideMenuItems.push({
                         name: passwordGroup.name,

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePasswordRequest;
+use App\Http\Resources\PasswordResource;
 use App\Http\Resources\UserResource;
+use App\Password;
 use App\Repositories\PasswordsRepository;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
@@ -47,6 +49,15 @@ class PasswordsController extends Controller
     }
 
     /**
+     * @param Password $password
+     * @return PasswordResource
+     */
+    public function show(Password $password)
+    {
+        return new PasswordResource($password);
+    }
+
+    /**
      * @return \Illuminate\Http\JsonResponse
      */
     public function store()
@@ -67,6 +78,26 @@ class PasswordsController extends Controller
         return response()->json([
             'error' => 'Something went wrong. Please contact our support'
         ], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @param Password $password
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Password $password)
+    {
+        if ($this->validator->fails()) {
+            return response()->json([
+                'errors' => $this->validator->errors()->toArray()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $password->update($this->request->all());
+
+        return response()->json([
+            'success' => true,
+            'user' => new UserResource(Auth::user())
+        ], Response::HTTP_OK);
     }
 
     /**

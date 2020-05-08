@@ -36,6 +36,8 @@ Route::middleware(['auth', 'permissions'])->group(function() {
 
     //Passwords
     Route::post('/passwords/store', 'PasswordsController@store')->name('passwords.store');
+    Route::post('/passwords/{password}/update', 'PasswordsController@update')->name('passwords.update');
+    Route::get('/passwords/{password}', 'PasswordsController@show')->name('passwords.show');
 
 
     //Settings

@@ -22,15 +22,18 @@
 
 <script>
     import PrimaryButton from "../Layout/Buttons/PrimaryButton";
+    import {user} from "../../mixins/user";
 
     export default {
         name: "ProjectsPage",
 
         components: {PrimaryButton},
 
+        mixins: [user],
+
         computed: {
             projects() {
-                return _.get(this.$store.state.user, ['projects', 'data'], []);
+                return this.user().getProjects();
             }
         },
 

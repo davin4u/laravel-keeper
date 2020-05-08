@@ -1,10 +1,10 @@
-import App from "./components/App";
-
 require('./bootstrap');
 
+import User from './User';
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import App from "./components/App";
 import LoginForm from "./components/Auth/LoginForm";
 import RegisterForm from "./components/Auth/RegisterForm";
 
@@ -24,7 +24,7 @@ Vue.component('app', App);
 
 const store = new Vuex.Store({
     state: {
-        user: window.Laravel.user || {},
+        user: new User(window.Laravel.user || {}),
 
         screen: null,
 
@@ -34,7 +34,7 @@ const store = new Vuex.Store({
     },
     mutations: {
         setUser(state, user) {
-            state.user = user;
+            state.user = new User(user);
         },
 
         changeScreen(state, screen) {

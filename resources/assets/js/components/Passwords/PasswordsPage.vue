@@ -29,9 +29,9 @@
                 </div>
 
                 <div class="p-2 w-1/5 text-right self-center">
-                    <PrimaryButton size="sm">edit</PrimaryButton>
+                    <PrimaryButton @click.native.prevent="edit(password)" size="sm">edit</PrimaryButton>
 
-                    <DangerButton size="sm">delete</DangerButton>
+                    <DangerButton @click.native.prevent="deletePassword(password)" size="sm">delete</DangerButton>
                 </div>
             </div>
         </div>
@@ -43,21 +43,32 @@
 <script>
     import PrimaryButton from "../Layout/Buttons/PrimaryButton";
     import DangerButton from "../Layout/Buttons/DangerButton";
+    import {user} from "../../mixins/user";
 
     export default {
         name: "PasswordsPage",
 
         components: {DangerButton, PrimaryButton},
 
+        mixins: [user],
+
         computed: {
             passwords() {
-                return _.get(this.$store.state.user, ['passwords', 'data'], []);
+                return this.user().getPasswords();
             }
         },
 
         methods: {
             create() {
                 this.$store.commit('changeScreen', 'passwords.create');
+            },
+
+            edit(password) {
+                this.$store.commit('changeScreen', 'passwords.edit#id:' + password.id);
+            },
+
+            deletePassword(password) {
+
             }
         }
     }

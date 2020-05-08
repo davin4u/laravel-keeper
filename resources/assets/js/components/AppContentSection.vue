@@ -5,7 +5,7 @@
         </template>
 
         <template v-slot:body>
-            <component :is="currentScreenComponent"></component>
+            <component :is="currentScreenComponent" :options="componentOptions"></component>
         </template>
     </Panel>
 </template>
@@ -17,6 +17,7 @@
     import ProjectsPage from "./Projects/ProjectsPage";
     import CreateProjectPage from "./Projects/CreateProjectPage";
     import PasswordsPage from "./Passwords/PasswordsPage";
+    import EditPasswordPage from "./Passwords/EditPasswordPage";
 
     export default {
         name: "AppContentSection",
@@ -25,12 +26,19 @@
 
         computed: {
             currentScreenComponent() {
-                switch (this.$store.state.screen) {
+                let screenState = this.$store.state.screen || '';
+
+                if (screenState.indexOf('#') !== -1) {
+                    screenState = screenState.split('#')[0];
+                }
+
+                switch (screenState) {
                     case 'dashboard': return DashboardPage;
 
                     // passwords
                     case 'passwords': return PasswordsPage;
                     case 'passwords.create': return CreatePasswordPage;
+                    case 'passwords.edit': return EditPasswordPage;
 
                     // projects
                     case 'projects': return ProjectsPage;
@@ -40,13 +48,39 @@
                 }
             },
 
+            componentOptions() {
+                let screenState = this.$store.state.screen || '';
+
+                if (screenState.indexOf('#') !== -1) {
+                     let optionsString = screenState.split('#')[1] || '';
+
+                     if (optionsString.indexOf(':') !== -1) {
+                         let options = {};
+                         let parsed = optionsString.split(':');
+
+                         options[parsed[0]] = parsed[1];
+
+                         return options;
+                     }
+                }
+
+                return {};
+            },
+
             currentScreenTitle() {
-                switch (this.$store.state.screen) {
+                let screenState = this.$store.state.screen || '';
+
+                if (screenState.indexOf('#') !== -1) {
+                    screenState = screenState.split('#')[0];
+                }
+
+                switch (screenState) {
                     case 'dashboard': return 'Dashboard';
 
                     // passwords
                     case 'passwords': return 'Passwords';
                     case 'passwords.create': return 'Create new password';
+                    case 'passwords.edit': return 'Edit password';
 
                     // projects
                     case 'projects': return 'Projects';

@@ -71,6 +71,10 @@
         },
 
         watch: {
+            'value': function () {
+                this.inputValue = parseInt(this.value);
+            },
+
             'inputValue': function () {
                 this.$emit('input', parseInt(this.inputValue));
             }

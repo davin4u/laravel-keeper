@@ -49,7 +49,9 @@
             ></FormTextArea>
 
             <div>
-                <PrimaryButton @click.native.prevent="create">Create</PrimaryButton>
+                <PrimaryButton @click.native.prevent="update">Save</PrimaryButton>
+
+                <DangerButton @click.native.prevent="cancel">Cancel</DangerButton>
             </div>
         </form>
     </div>
@@ -58,22 +60,25 @@
 <script>
     import Error from "../Layout/Error";
     import Loading from "../Layout/Loading";
-    import FormInput from "../Layout/Form/FormInput";
-    import PrimaryButton from "../Layout/Buttons/PrimaryButton";
     import FormSelect from "../Layout/Form/FormSelect";
+    import FormInput from "../Layout/Form/FormInput";
     import FormTextArea from "../Layout/Form/FormTextArea";
+    import PrimaryButton from "../Layout/Buttons/PrimaryButton";
     import {user} from "../../mixins/user";
+    import DangerButton from "../Layout/Buttons/DangerButton";
 
     export default {
-        name: "CreatePasswordPage",
+        name: "EditPasswordPage",
 
-        components: {FormTextArea, FormSelect, PrimaryButton, FormInput, Loading, Error},
+        components: {DangerButton, PrimaryButton, FormTextArea, FormInput, FormSelect, Loading, Error},
 
         mixins: [user],
 
+        props: ['options'],
+
         data() {
             return {
-                loading: false,
+                loading: true,
 
                 error: '',
 
@@ -96,6 +101,10 @@
         },
 
         computed: {
+            passwordId() {
+                return _.get(this.options, ['id'], null);
+            },
+
             projects() {
                 let items = [];
 
@@ -132,7 +141,11 @@
         },
 
         methods: {
-            create() {
+            cancel() {
+                this.$store.commit('changeScreen', 'passwords');
+            },
+
+            update() {
                 this.loading = true;
 
                 let data = {
@@ -144,7 +157,7 @@
                     full_description: this.form.full_description
                 };
 
-                this.http().post(this.route('passwords.store'), data)
+                this.http().post(this.route('passwords.update', {id: this.passwordId}), data)
                     .then((response) => {
                         this.loading = false;
 
@@ -179,6 +192,25 @@
                     this.form.errors[fields[key]] = errors[fields[key]][0] || '';
                 }
             }
+        },
+
+        mounted() {
+            if (!_.isNull(this.passwordId)) {
+                this.http().get(this.route('passwords.get', {id: this.passwordId}))
+                    .then((response) => {
+                        this.loading = false;
+
+                        if (!_.isUndefined(response) && !_.isUndefined(response.data)) {
+                            this.form.project_id = _.get(response, ['data', 'project', 'id'], 0);
+                            this.form.group_id = _.get(response, ['data', 'group_id'], 0);
+                            this.form.name = _.get(response, ['data', 'name'], '');
+                            this.form.username = _.get(response, ['data', 'username'], '');
+                            this.form.password = _.get(response, ['data', 'decrypted_password'], '');
+                            this.form.full_description = _.get(response, ['data', 'full_description'], '');
+                        }
+                    });
+            }
         }
+
     }
 </script>
