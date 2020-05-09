@@ -101,6 +101,21 @@ class PasswordsController extends Controller
     }
 
     /**
+     * @param Password $password
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function delete(Password $password)
+    {
+        $password->delete();
+
+        return response()->json([
+            'success' => true,
+            'user' => new UserResource(Auth::user())
+        ], Response::HTTP_OK);
+    }
+
+    /**
      * @param array $data
      * @param FormRequest $requestClass
      * @return \Illuminate\Contracts\Validation\Validator

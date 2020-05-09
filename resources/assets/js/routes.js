@@ -13,5 +13,6 @@ export const routes = {
     'passwords.create': '/passwords/create',
     'passwords.store': '/passwords/store',
     'passwords.get': '/passwords/{id}',
-    'passwords.update': '/passwords/{id}/update'
+    'passwords.update': '/passwords/{id}/update',
+    'passwords.delete': '/passwords/{id}/delete'
 };

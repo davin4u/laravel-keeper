@@ -15,7 +15,7 @@ class PasswordsRepository
      * @param array $data
      * @return Password|null
      */
-    public function create($data = [])
+    public function create(array $data = [])
     {
         $data['user_id'] = Auth::user()->id;
 

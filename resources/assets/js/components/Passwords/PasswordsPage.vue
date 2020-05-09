@@ -1,5 +1,7 @@
 <template>
     <div>
+        <Error v-if="error">{{ error }}</Error>
+
         <div class="w-full mb-2">
             <div class="flex border-b border-gray-300">
                 <div class="p-2 w-2/5 font-bold">Password name</div>
@@ -37,6 +39,15 @@
         </div>
 
         <PrimaryButton @click.native.prevent="create" size="sm">Add new password</PrimaryButton>
+
+        <ConfirmationModal
+                v-if="deleting"
+                @confirm="confirmPasswordDelete"
+                @cancel="deleting = null"
+        >
+            <p>You are going to delete the password</p>
+            <p>Are you sure?</p>
+        </ConfirmationModal>
     </div>
 </template>
 
@@ -44,13 +55,24 @@
     import PrimaryButton from "../Layout/Buttons/PrimaryButton";
     import DangerButton from "../Layout/Buttons/DangerButton";
     import {user} from "../../mixins/user";
+    import Modal from "../Layout/Modal/Modal";
+    import ConfirmationModal from "../Layout/Modal/ConfirmationModal";
+    import Error from "../Layout/Error";
 
     export default {
         name: "PasswordsPage",
 
-        components: {DangerButton, PrimaryButton},
+        components: {Error, ConfirmationModal, Modal, DangerButton, PrimaryButton},
 
         mixins: [user],
+
+        data() {
+            return {
+                error: '',
+
+                deleting: null
+            }
+        },
 
         computed: {
             passwords() {
@@ -68,7 +90,37 @@
             },
 
             deletePassword(password) {
+                this.deleting = password;
+            },
 
+            confirmPasswordDelete() {
+                if (!this.deleting) {
+                    return;
+                }
+
+                this.http().post(this.route('passwords.delete', {id: this.deleting.id}))
+                    .then((response) => {
+                        this.deleting = null;
+
+                        this.processResponse(response);
+                    })
+                    .catch(() => {
+                        this.deleting = null;
+
+                        this.error = 'Something went wrong. Please contact our support.';
+                    });
+            },
+
+            processResponse(response) {
+                if (!_.isUndefined(response.user) && response.success === true) {
+                    this.$store.commit('setUser', response.user);
+                }
+                else if (!_.isUndefined(response.error)) {
+                    this.error = response.error;
+                }
+                else {
+                    this.error = 'Something went wrong. Please contact our support.';
+                }
             }
         }
     }
