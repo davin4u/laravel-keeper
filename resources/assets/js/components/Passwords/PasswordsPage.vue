@@ -2,7 +2,7 @@
     <div>
         <Error v-if="error">{{ error }}</Error>
 
-        <div class="w-full mb-2">
+        <div v-if="havePasswords" class="w-full mb-2">
             <div class="flex border-b border-gray-300">
                 <div class="p-2 w-2/5 font-bold">Password name</div>
 
@@ -37,6 +37,9 @@
                 </div>
             </div>
         </div>
+        <div v-else>
+            <Alert>No passwords added yet.</Alert>
+        </div>
 
         <PrimaryButton @click.native.prevent="create" size="sm">Add new password</PrimaryButton>
 
@@ -58,13 +61,16 @@
     import Modal from "../Layout/Modal/Modal";
     import ConfirmationModal from "../Layout/Modal/ConfirmationModal";
     import Error from "../Layout/Error";
+    import Alert from "../Layout/Alert";
 
     export default {
         name: "PasswordsPage",
 
-        components: {Error, ConfirmationModal, Modal, DangerButton, PrimaryButton},
+        components: {Alert, Error, ConfirmationModal, Modal, DangerButton, PrimaryButton},
 
         mixins: [user],
+
+        props: ['options'],
 
         data() {
             return {
@@ -76,11 +82,47 @@
 
         computed: {
             passwords() {
-                return this.user().getPasswords();
+                return this.filterPasswords(
+                    this.user().getPasswords()
+                );
+            },
+
+            selectedPasswordGroup() {
+                let id = _.get(this.options, ['password-group'], null);
+
+                if (!_.isNull(id)) {
+                    id = parseInt(id);
+                }
+
+                return id;
+            },
+
+            havePasswords() {
+                return this.passwords.length > 0;
             }
         },
 
         methods: {
+            filterPasswords(passwords) {
+                if (!_.isNull(this.selectedPasswordGroup)) {
+                    let filtered = [];
+
+                    for (let k in passwords) {
+                        if (
+                            !_.isUndefined(passwords[k].group)
+                            && !_.isNull(passwords[k].group)
+                            && passwords[k].group.id === this.selectedPasswordGroup
+                        ) {
+                            filtered.push(passwords[k]);
+                        }
+                    }
+
+                    return filtered;
+                }
+
+                return passwords;
+            },
+
             create() {
                 this.$store.commit('changeScreen', 'passwords.create');
             },

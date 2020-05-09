@@ -20,6 +20,7 @@ class PasswordResource extends JsonResource
             'username' => $this->username,
             'password' => '********',
             'project' => new ProjectResource($this->project),
+            'group' => new PasswordGroupResource($this->group),
             'decrypted_password' => $this->decryptedPassword,
             'full_description' => $this->full_description
         ];

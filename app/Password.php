@@ -17,7 +17,7 @@ class Password extends Model
     /**
      * @var array
      */
-    protected $fillable = ['user_id', 'project_id', 'name', 'username', 'password', 'full_description', 'viewed_at'];
+    protected $fillable = ['user_id', 'project_id', 'group_id', 'name', 'username', 'password', 'full_description', 'viewed_at'];
 
     /**
      * @var array
@@ -43,6 +43,14 @@ class Password extends Model
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function group()
+    {
+        return $this->belongsTo(PasswordGroup::class);
     }
 
     /**
