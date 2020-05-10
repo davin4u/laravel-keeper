@@ -10,14 +10,14 @@
                             :name="'project_id'"
                             :placeholder="'Project'"
                             :options="projects"
-                            class="w-1/2 mr-1"
+                            class="w-1/2 mr-1 mb-2"
                 ></FormSelect>
 
                 <FormSelect v-model="form.group_id"
                             :name="'group_id'"
                             :placeholder="'Password group'"
                             :options="groups"
-                            class="w-1/2 ml-1"
+                            class="w-1/2 ml-1 mb-2"
                 ></FormSelect>
             </div>
 
@@ -26,6 +26,7 @@
                        :type="'text'"
                        :placeholder="'Password name'"
                        :error="form.errors.name"
+                       class="mb-2"
             ></FormInput>
 
             <FormInput v-model="form.username"
@@ -33,6 +34,7 @@
                        :type="'text'"
                        :placeholder="'Username'"
                        :error="form.errors.username"
+                       class="mb-2"
             ></FormInput>
 
             <FormInput v-model="form.password"
@@ -40,6 +42,7 @@
                        :type="'password'"
                        :placeholder="'Password'"
                        :error="form.errors.password"
+                       class="mb-2"
             ></FormInput>
 
             <FormTextArea v-model="form.full_description"

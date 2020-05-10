@@ -2,7 +2,21 @@
     <div>
         <Error v-if="error">{{ error }}</Error>
 
-        <div v-if="havePasswords" class="w-full mb-2">
+        <div class="mb-2 p-2 bg-gray-100 flex">
+            <div class="w-1/2">
+                <FormInput
+                        v-model="search"
+                        :type="'text'"
+                        :name="'search'"
+                        :placeholder="'Search for a password'"
+                ></FormInput>
+            </div>
+
+            <div class="w-1/2 text-right self-center">
+            </div>
+        </div>
+
+        <div v-if="havePasswords" class="w-full">
             <div class="flex border-b border-gray-300">
                 <div class="p-2 w-2/5 font-bold">Password name</div>
 
@@ -38,10 +52,8 @@
             </div>
         </div>
         <div v-else>
-            <Alert>No passwords added yet.</Alert>
+            <Alert>{{ noPasswordsMessage }}</Alert>
         </div>
-
-        <PrimaryButton @click.native.prevent="create" size="sm">Add new password</PrimaryButton>
 
         <ConfirmationModal
                 v-if="deleting"
@@ -62,11 +74,12 @@
     import ConfirmationModal from "../Layout/Modal/ConfirmationModal";
     import Error from "../Layout/Error";
     import Alert from "../Layout/Alert";
+    import FormInput from "../Layout/Form/FormInput";
 
     export default {
         name: "PasswordsPage",
 
-        components: {Alert, Error, ConfirmationModal, Modal, DangerButton, PrimaryButton},
+        components: {FormInput, Alert, Error, ConfirmationModal, Modal, DangerButton, PrimaryButton},
 
         mixins: [user],
 
@@ -76,7 +89,9 @@
             return {
                 error: '',
 
-                deleting: null
+                deleting: null,
+
+                search: ''
             }
         },
 
@@ -99,11 +114,46 @@
 
             havePasswords() {
                 return this.passwords.length > 0;
+            },
+
+            noPasswordsMessage() {
+                return this.search.length > 0 ? 'No passwords found.' : 'No passwords added yet.';
             }
         },
 
         methods: {
             filterPasswords(passwords) {
+                if (passwords.length === 0) {
+                    return [];
+                }
+
+                return passwords.filter((password) => {
+                    if (!_.isNull(this.selectedPasswordGroup)) {
+                        if (
+                            !_.isUndefined(password.group)
+                            && !_.isNull(password.group)
+                            && password.group.id !== this.selectedPasswordGroup
+                        ) {
+                            return false;
+                        }
+                    }
+
+                    if (this.search.length > 0) {
+                        if (password.name.toLowerCase().indexOf(this.search.toLowerCase()) === -1) {
+                            if (!_.isUndefined(password.project)) {
+                                if (password.project.name.toLowerCase().indexOf(this.search.toLowerCase()) === -1) {
+                                    return false;
+                                }
+                            }
+                            else {
+                                return false;
+                            }
+                        }
+                    }
+
+                    return true;
+                });
+
                 if (!_.isNull(this.selectedPasswordGroup)) {
                     let filtered = [];
 

@@ -1511,6 +1511,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -1645,6 +1648,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layout_Buttons_PrimaryButton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Layout/Buttons/PrimaryButton */ "./resources/assets/js/components/Layout/Buttons/PrimaryButton.vue");
 /* harmony import */ var _mixins_user__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../mixins/user */ "./resources/assets/js/mixins/user.js");
 /* harmony import */ var _Layout_Buttons_DangerButton__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Layout/Buttons/DangerButton */ "./resources/assets/js/components/Layout/Buttons/DangerButton.vue");
+//
+//
+//
 //
 //
 //
@@ -1868,6 +1874,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layout_Modal_ConfirmationModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Layout/Modal/ConfirmationModal */ "./resources/assets/js/components/Layout/Modal/ConfirmationModal.vue");
 /* harmony import */ var _Layout_Error__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Layout/Error */ "./resources/assets/js/components/Layout/Error.vue");
 /* harmony import */ var _Layout_Alert__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Layout/Alert */ "./resources/assets/js/components/Layout/Alert.vue");
+/* harmony import */ var _Layout_Form_FormInput__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Layout/Form/FormInput */ "./resources/assets/js/components/Layout/Form/FormInput.vue");
 //
 //
 //
@@ -1924,6 +1931,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -1934,6 +1956,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "PasswordsPage",
   components: {
+    FormInput: _Layout_Form_FormInput__WEBPACK_IMPORTED_MODULE_7__["default"],
     Alert: _Layout_Alert__WEBPACK_IMPORTED_MODULE_6__["default"],
     Error: _Layout_Error__WEBPACK_IMPORTED_MODULE_5__["default"],
     ConfirmationModal: _Layout_Modal_ConfirmationModal__WEBPACK_IMPORTED_MODULE_4__["default"],
@@ -1946,7 +1969,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       error: '',
-      deleting: null
+      deleting: null,
+      search: ''
     };
   },
   computed: {
@@ -1964,10 +1988,41 @@ __webpack_require__.r(__webpack_exports__);
     },
     havePasswords: function havePasswords() {
       return this.passwords.length > 0;
+    },
+    noPasswordsMessage: function noPasswordsMessage() {
+      return this.search.length > 0 ? 'No passwords found.' : 'No passwords added yet.';
     }
   },
   methods: {
     filterPasswords: function filterPasswords(passwords) {
+      var _this = this;
+
+      if (passwords.length === 0) {
+        return [];
+      }
+
+      return passwords.filter(function (password) {
+        if (!_.isNull(_this.selectedPasswordGroup)) {
+          if (!_.isUndefined(password.group) && !_.isNull(password.group) && password.group.id !== _this.selectedPasswordGroup) {
+            return false;
+          }
+        }
+
+        if (_this.search.length > 0) {
+          if (password.name.toLowerCase().indexOf(_this.search.toLowerCase()) === -1) {
+            if (!_.isUndefined(password.project)) {
+              if (password.project.name.toLowerCase().indexOf(_this.search.toLowerCase()) === -1) {
+                return false;
+              }
+            } else {
+              return false;
+            }
+          }
+        }
+
+        return true;
+      });
+
       if (!_.isNull(this.selectedPasswordGroup)) {
         var filtered = [];
 
@@ -1992,7 +2047,7 @@ __webpack_require__.r(__webpack_exports__);
       this.deleting = password;
     },
     confirmPasswordDelete: function confirmPasswordDelete() {
-      var _this = this;
+      var _this2 = this;
 
       if (!this.deleting) {
         return;
@@ -2001,12 +2056,12 @@ __webpack_require__.r(__webpack_exports__);
       this.http().post(this.route('passwords.delete', {
         id: this.deleting.id
       })).then(function (response) {
-        _this.deleting = null;
+        _this2.deleting = null;
 
-        _this.processResponse(response);
+        _this2.processResponse(response);
       })["catch"](function () {
-        _this.deleting = null;
-        _this.error = 'Something went wrong. Please contact our support.';
+        _this2.deleting = null;
+        _this2.error = 'Something went wrong. Please contact our support.';
       });
     },
     processResponse: function processResponse(response) {
@@ -2036,6 +2091,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layout_Form_FormInput__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Layout/Form/FormInput */ "./resources/assets/js/components/Layout/Form/FormInput.vue");
 /* harmony import */ var _Layout_Error__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Layout/Error */ "./resources/assets/js/components/Layout/Error.vue");
 /* harmony import */ var _Layout_Buttons_PrimaryButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Layout/Buttons/PrimaryButton */ "./resources/assets/js/components/Layout/Buttons/PrimaryButton.vue");
+//
+//
 //
 //
 //
@@ -2156,6 +2213,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layout_Buttons_PrimaryButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Layout/Buttons/PrimaryButton */ "./resources/assets/js/components/Layout/Buttons/PrimaryButton.vue");
 /* harmony import */ var _Layout_Buttons_DangerButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Layout/Buttons/DangerButton */ "./resources/assets/js/components/Layout/Buttons/DangerButton.vue");
 /* harmony import */ var _mixins_user__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../mixins/user */ "./resources/assets/js/mixins/user.js");
+//
+//
 //
 //
 //
@@ -21661,7 +21720,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "mb-2" }, [
+  return _c("div", [
     _vm.type === "checkbox"
       ? _c("input", {
           directives: [
@@ -21799,7 +21858,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "mb-2" }, [
+  return _c("div", [
     _c("div", { staticClass: "relative" }, [
       _c(
         "select",
@@ -22266,7 +22325,7 @@ var render = function() {
             { staticClass: "flex" },
             [
               _c("FormSelect", {
-                staticClass: "w-1/2 mr-1",
+                staticClass: "w-1/2 mr-1 mb-2",
                 attrs: {
                   name: "project_id",
                   placeholder: "Project",
@@ -22282,7 +22341,7 @@ var render = function() {
               }),
               _vm._v(" "),
               _c("FormSelect", {
-                staticClass: "w-1/2 ml-1",
+                staticClass: "w-1/2 ml-1 mb-2",
                 attrs: {
                   name: "group_id",
                   placeholder: "Password group",
@@ -22301,6 +22360,7 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("FormInput", {
+            staticClass: "mb-2",
             attrs: {
               name: "name",
               type: "text",
@@ -22317,6 +22377,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("FormInput", {
+            staticClass: "mb-2",
             attrs: {
               name: "username",
               type: "text",
@@ -22333,6 +22394,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("FormInput", {
+            staticClass: "mb-2",
             attrs: {
               name: "password",
               type: "password",
@@ -22433,7 +22495,7 @@ var render = function() {
             { staticClass: "flex" },
             [
               _c("FormSelect", {
-                staticClass: "w-1/2 mr-1",
+                staticClass: "w-1/2 mr-1 mb-2",
                 attrs: {
                   name: "project_id",
                   placeholder: "Project",
@@ -22449,7 +22511,7 @@ var render = function() {
               }),
               _vm._v(" "),
               _c("FormSelect", {
-                staticClass: "w-1/2 ml-1",
+                staticClass: "w-1/2 ml-1 mb-2",
                 attrs: {
                   name: "group_id",
                   placeholder: "Password group",
@@ -22468,6 +22530,7 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("FormInput", {
+            staticClass: "mb-2",
             attrs: {
               name: "name",
               type: "text",
@@ -22484,6 +22547,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("FormInput", {
+            staticClass: "mb-2",
             attrs: {
               name: "username",
               type: "text",
@@ -22500,6 +22564,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("FormInput", {
+            staticClass: "mb-2",
             attrs: {
               name: "password",
               type: "password",
@@ -22595,106 +22660,123 @@ var render = function() {
     [
       _vm.error ? _c("Error", [_vm._v(_vm._s(_vm.error))]) : _vm._e(),
       _vm._v(" "),
+      _c("div", { staticClass: "mb-2 p-2 bg-gray-100 flex" }, [
+        _c(
+          "div",
+          { staticClass: "w-1/2" },
+          [
+            _c("FormInput", {
+              attrs: {
+                type: "text",
+                name: "search",
+                placeholder: "Search for a password"
+              },
+              model: {
+                value: _vm.search,
+                callback: function($$v) {
+                  _vm.search = $$v
+                },
+                expression: "search"
+              }
+            })
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "w-1/2 text-right self-center" })
+      ]),
+      _vm._v(" "),
       _vm.havePasswords
-        ? _c(
-            "div",
-            { staticClass: "w-full mb-2" },
-            [
-              _vm._m(0),
-              _vm._v(" "),
-              _vm._l(_vm.passwords, function(password) {
-                return _c(
-                  "div",
-                  { staticClass: "flex border-b border-gray-300" },
-                  [
-                    _c("div", { staticClass: "p-2 w-2/5 self-center" }, [
-                      _c("div", { staticClass: "text-gray-700" }, [
-                        _vm._v(_vm._s(password.name))
+        ? _c("div", { staticClass: "w-full" }, [
+            _c(
+              "div",
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _vm._l(_vm.passwords, function(password) {
+                  return _c(
+                    "div",
+                    { staticClass: "flex border-b border-gray-300" },
+                    [
+                      _c("div", { staticClass: "p-2 w-2/5 self-center" }, [
+                        _c("div", { staticClass: "text-gray-700" }, [
+                          _vm._v(_vm._s(password.name))
+                        ]),
+                        _vm._v(" "),
+                        password.project
+                          ? _c(
+                              "div",
+                              { staticClass: "text-gray-500 text-sm" },
+                              [
+                                _c(
+                                  "a",
+                                  {
+                                    attrs: {
+                                      href: password.project.url,
+                                      target: "_blank"
+                                    }
+                                  },
+                                  [_vm._v(_vm._s(password.project.name))]
+                                )
+                              ]
+                            )
+                          : _vm._e()
                       ]),
                       _vm._v(" "),
-                      password.project
-                        ? _c("div", { staticClass: "text-gray-500 text-sm" }, [
-                            _c(
-                              "a",
-                              {
-                                attrs: {
-                                  href: password.project.url,
-                                  target: "_blank"
+                      _c("div", { staticClass: "p-2 w-1/5 self-center" }, [
+                        _c("div", { staticClass: "text-gray-700" }, [
+                          _vm._v(_vm._s(password.username))
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "p-2 w-1/5 self-center" }, [
+                        _c("div", { staticClass: "text-gray-700" }, [
+                          _vm._v(_vm._s(password.password))
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "p-2 w-1/5 text-right self-center" },
+                        [
+                          _c(
+                            "PrimaryButton",
+                            {
+                              attrs: { size: "sm" },
+                              nativeOn: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.edit(password)
                                 }
-                              },
-                              [_vm._v(_vm._s(password.project.name))]
-                            )
-                          ])
-                        : _vm._e()
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "p-2 w-1/5 self-center" }, [
-                      _c("div", { staticClass: "text-gray-700" }, [
-                        _vm._v(_vm._s(password.username))
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "p-2 w-1/5 self-center" }, [
-                      _c("div", { staticClass: "text-gray-700" }, [
-                        _vm._v(_vm._s(password.password))
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      { staticClass: "p-2 w-1/5 text-right self-center" },
-                      [
-                        _c(
-                          "PrimaryButton",
-                          {
-                            attrs: { size: "sm" },
-                            nativeOn: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                return _vm.edit(password)
                               }
-                            }
-                          },
-                          [_vm._v("edit")]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "DangerButton",
-                          {
-                            attrs: { size: "sm" },
-                            nativeOn: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                return _vm.deletePassword(password)
+                            },
+                            [_vm._v("edit")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "DangerButton",
+                            {
+                              attrs: { size: "sm" },
+                              nativeOn: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.deletePassword(password)
+                                }
                               }
-                            }
-                          },
-                          [_vm._v("delete")]
-                        )
-                      ],
-                      1
-                    )
-                  ]
-                )
-              })
-            ],
-            2
-          )
-        : _c("div", [_c("Alert", [_vm._v("No passwords added yet.")])], 1),
-      _vm._v(" "),
-      _c(
-        "PrimaryButton",
-        {
-          attrs: { size: "sm" },
-          nativeOn: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.create($event)
-            }
-          }
-        },
-        [_vm._v("Add new password")]
-      ),
+                            },
+                            [_vm._v("delete")]
+                          )
+                        ],
+                        1
+                      )
+                    ]
+                  )
+                })
+              ],
+              2
+            )
+          ])
+        : _c("div", [_c("Alert", [_vm._v(_vm._s(_vm.noPasswordsMessage))])], 1),
       _vm._v(" "),
       _vm.deleting
         ? _c(
@@ -22776,6 +22858,7 @@ var render = function() {
         },
         [
           _c("FormInput", {
+            staticClass: "mb-2",
             attrs: {
               name: "name",
               type: "text",
@@ -22792,6 +22875,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("FormInput", {
+            staticClass: "mb-2",
             attrs: {
               name: "url",
               type: "text",
@@ -22873,6 +22957,7 @@ var render = function() {
         },
         [
           _c("FormInput", {
+            staticClass: "mb-2",
             attrs: {
               name: "name",
               type: "text",
@@ -22889,6 +22974,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("FormInput", {
+            staticClass: "mb-2",
             attrs: {
               name: "url",
               type: "text",

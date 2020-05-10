@@ -10,6 +10,7 @@
                        :type="'text'"
                        :placeholder="'Project name'"
                        :error="form.errors.name"
+                       class="mb-2"
             ></FormInput>
 
             <FormInput v-model="form.url"
@@ -17,6 +18,7 @@
                        :type="'text'"
                        :placeholder="'URL'"
                        :error="form.errors.url"
+                       class="mb-2"
             ></FormInput>
 
             <div>

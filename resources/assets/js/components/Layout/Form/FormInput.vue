@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-2">
+    <div>
         <input
                 class="w-full border p-2 outline-none"
                 :class="{

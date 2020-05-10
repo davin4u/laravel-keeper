@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-2">
+    <div>
         <div class="relative">
             <select
                     class="w-full border p-2 border-gray-200 bg-white appearance-none rounded-none outline-none"
