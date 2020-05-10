@@ -33,6 +33,8 @@ Route::middleware(['auth', 'permissions'])->group(function() {
 
     //Projects
     Route::post('/projects/store', 'ProjectsController@store')->name('projects.store');
+    Route::post('/projects/{project}/update', 'ProjectsController@update')->name('projects.update');
+    Route::post('/projects/{project}/delete', 'ProjectsController@delete')->name('projects.delete');
 
     //Passwords
     Route::post('/passwords/store', 'PasswordsController@store')->name('passwords.store');
@@ -43,6 +45,7 @@ Route::middleware(['auth', 'permissions'])->group(function() {
 
 
     //Settings
+    /*
     Route::get('/settings/password-types', 'SettingsController@index')->name('settings_index');
     Route::get('/settings/password-types/new', 'SettingsController@create')->name('settings_create');
     Route::post('/settings/password-types/new', 'SettingsController@store')->name('settings_store');
@@ -53,4 +56,5 @@ Route::middleware(['auth', 'permissions'])->group(function() {
     Route::post('/settings/profile', 'SettingsController@profile')->name('settings_profile_save');
     Route::get('/settings/permissions', 'SettingsController@permissions')->name('settings_permissions_edit');
     Route::post('/settings/permissions', 'SettingsController@permissions')->name('settings_permissions_save');
+    */
 });

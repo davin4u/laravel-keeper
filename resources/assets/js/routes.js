@@ -8,6 +8,8 @@ export const routes = {
 
     //projects
     'projects.store': '/projects/store',
+    'projects.delete': '/projects/{id}/delete',
+    'projects.update': '/projects/{id}/update',
 
     //passwords
     'passwords.create': '/passwords/create',

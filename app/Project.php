@@ -5,45 +5,25 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use App\Password;
-use App\File;
-use App\Repositories\FilesRepository;
-
 class Project extends Model
 {
     use SoftDeletes;
 
+    /**
+     * @var array
+     */
     protected $dates = ['deleted_at'];
 
+    /**
+     * @var array
+     */
     protected $fillable = ['user_id', 'name', 'url', 'short_description', 'full_description'];
 
-    public function removable()
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function passwords()
     {
-        return $this->user_id == auth()->user()->id;
-    }
-
-    public function atachFiles($files = [])
-    {
-        if (!empty($files)) {
-            $repository = new FilesRepository();
-
-            foreach ($files as $file) {
-                $fileName = md5($file->getFileName() . time()) . '.' . $file->guessClientExtension();
-
-                $path = $file->storeAs('files/projects/' . $this->id, $fileName, 'public');
-
-                $repository->create([
-                    'type' => File::TYPE_PROJECT,
-                    'entity_id' => $this->id,
-                    'path' => $path,
-                    'original_name' => str_replace(' ', '-', $file->getClientOriginalName())
-                ]);
-            }
-        }
-    }
-
-    public function files()
-    {
-        return File::projects()->where('entity_id', $this->id)->get();
+        return $this->hasMany(Password::class);
     }
 }

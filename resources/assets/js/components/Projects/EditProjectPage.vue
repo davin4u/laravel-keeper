@@ -4,7 +4,7 @@
 
         <Loading v-if="loading"></Loading>
 
-        <form role="form" method="POST" :action="route('projects.store')">
+        <form role="form" method="POST" :action="route('projects.update')">
             <FormInput v-model="form.name"
                        :name="'name'"
                        :type="'text'"
@@ -20,22 +20,30 @@
             ></FormInput>
 
             <div>
-                <PrimaryButton @click.native.prevent="create">Create</PrimaryButton>
+                <PrimaryButton @click.native.prevent="save">Save</PrimaryButton>
+
+                <DangerButton @click.native.prevent="cancel">Cancel</DangerButton>
             </div>
         </form>
     </div>
 </template>
 
 <script>
+    import Error from "../Layout/Error";
     import Loading from "../Layout/Loading";
     import FormInput from "../Layout/Form/FormInput";
-    import Error from "../Layout/Error";
     import PrimaryButton from "../Layout/Buttons/PrimaryButton";
+    import DangerButton from "../Layout/Buttons/DangerButton";
+    import {user} from "../../mixins/user";
 
     export default {
-        name: "CreateProjectPage",
+        name: "EditProjectPage",
 
-        components: {PrimaryButton, Error, FormInput, Loading},
+        components: {DangerButton, PrimaryButton, FormInput, Loading, Error},
+
+        props: ['options'],
+
+        mixins: [user],
 
         data() {
             return {
@@ -44,6 +52,7 @@
                 error: '',
 
                 form: {
+                    id: '',
                     name: '',
                     url: '',
                     errors: {
@@ -55,7 +64,7 @@
         },
 
         methods: {
-            create() {
+            save() {
                 this.loading = true;
 
                 let data = {
@@ -63,7 +72,7 @@
                     url: this.form.url
                 };
 
-                this.http().post(this.route('projects.store'), data)
+                this.http().post(this.route('projects.update', {id: this.form.id}), data)
                     .then((response) => {
                         this.loading = false;
 
@@ -97,16 +106,33 @@
 
                     this.form.errors[fields[key]] = errors[fields[key]][0] || '';
                 }
+            },
+
+            cancel() {
+                this.$store.commit('changeScreen', 'projects');
             }
         },
 
-        watch: {
-            'form.name': function () {
-                this.form.errors.name = '';
-            },
-            'form.url': function () {
-                this.form.errors.url = '';
+        mounted() {
+            let id = _.get(this.options, ['id'], null);
+
+            if (_.isNull(id)) {
+                this.error = 'Something went wrong. Please contact our support.';
+
+                return;
             }
+
+            let project = this.user().getProjectById(parseInt(id));
+
+            if (_.isNull(project)) {
+                this.error = "It seems you are trying to edit a project which does not exist in your projects list.";
+
+                return;
+            }
+
+            this.form.id = _.get(project, ['id']);
+            this.form.name = _.get(project, ['name']);
+            this.form.url = _.get(project, ['url']);
         }
     }
 </script>

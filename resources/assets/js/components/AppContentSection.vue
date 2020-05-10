@@ -18,6 +18,7 @@
     import CreateProjectPage from "./Projects/CreateProjectPage";
     import PasswordsPage from "./Passwords/PasswordsPage";
     import EditPasswordPage from "./Passwords/EditPasswordPage";
+    import EditProjectPage from "./Projects/EditProjectPage";
 
     export default {
         name: "AppContentSection",
@@ -43,6 +44,7 @@
                     // projects
                     case 'projects': return ProjectsPage;
                     case 'projects.create': return CreateProjectPage;
+                    case 'projects.edit': return EditProjectPage;
 
                     default: return null;
                 }
@@ -85,6 +87,7 @@
                     // projects
                     case 'projects': return 'Projects';
                     case 'projects.create': return 'Create new project';
+                    case 'projects.edit': return 'Edit project';
 
                     default: return null;
                 }
