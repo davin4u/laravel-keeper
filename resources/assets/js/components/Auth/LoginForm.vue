@@ -14,12 +14,14 @@
                                    :name="'email'"
                                    :type="'email'"
                                    :placeholder="'E-mail'"
+                                   class="mb-2"
                         ></FormInput>
 
                         <FormInput v-model="form.password"
                                    :name="'password'"
                                    :type="'password'"
                                    :placeholder="'Password'"
+                                   class="mb-2"
                         ></FormInput>
 
                         <div>

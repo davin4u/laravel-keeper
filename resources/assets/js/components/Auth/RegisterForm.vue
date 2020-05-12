@@ -15,6 +15,7 @@
                                    :type="'text'"
                                    :placeholder="'Your name'"
                                    :error="form.errors.name"
+                                   class="mb-2"
                         ></FormInput>
 
                         <FormInput v-model="form.email"
@@ -22,6 +23,7 @@
                                    :type="'email'"
                                    :placeholder="'E-mail'"
                                    :error="form.errors.email"
+                                   class="mb-2"
                         ></FormInput>
 
                         <FormInput v-model="form.password"
@@ -29,12 +31,14 @@
                                    :type="'password'"
                                    :placeholder="'Password'"
                                    :error="form.errors.password"
+                                   class="mb-2"
                         ></FormInput>
 
                         <FormInput v-model="form.password_confirmation"
                                    :name="'password_confirmation'"
                                    :type="'password'"
                                    :placeholder="'Confirm password'"
+                                   class="mb-2"
                         ></FormInput>
 
                         <div>

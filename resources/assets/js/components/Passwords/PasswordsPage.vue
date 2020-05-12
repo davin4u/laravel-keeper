@@ -18,17 +18,15 @@
 
         <div v-if="havePasswords" class="w-full">
             <div class="flex border-b border-gray-300">
-                <div class="p-2 w-2/5 font-bold">Password name</div>
+                <div class="p-2 w-56 font-bold">Password name</div>
 
-                <div class="p-2 w-1/5 font-bold">Username</div>
+                <div class="p-2 flex-1 font-bold">Username</div>
 
-                <div class="p-2 w-1/5 font-bold">Password</div>
-
-                <div class="p-2 w-1/5"></div>
+                <div class="p-2 w-56"></div>
             </div>
 
             <div v-for="password in passwords" class="flex border-b border-gray-300">
-                <div class="p-2 w-2/5 self-center">
+                <div class="p-2 w-56 self-center">
                     <div class="text-gray-700">{{ password.name }}</div>
 
                     <div v-if="password.project" class="text-gray-500 text-sm">
@@ -36,15 +34,13 @@
                     </div>
                 </div>
 
-                <div class="p-2 w-1/5 self-center">
+                <div class="p-2 flex-1 self-center">
                     <div class="text-gray-700">{{ password.username }}</div>
                 </div>
 
-                <div class="p-2 w-1/5 self-center">
-                    <div class="text-gray-700">{{ password.password }}</div>
-                </div>
+                <div class="p-2 w-56 text-right self-center">
+                    <PrimaryButton @click.native.prevent="showDetails(password)" size="sm">details</PrimaryButton>
 
-                <div class="p-2 w-1/5 text-right self-center">
                     <PrimaryButton @click.native.prevent="edit(password)" size="sm">edit</PrimaryButton>
 
                     <DangerButton @click.native.prevent="deletePassword(password)" size="sm">delete</DangerButton>
@@ -63,6 +59,12 @@
             <p>You are going to delete the password</p>
             <p>Are you sure?</p>
         </ConfirmationModal>
+
+        <SideDetailView
+                v-if="detail"
+                :password="detail"
+                @close="detail = null"
+        ></SideDetailView>
     </div>
 </template>
 
@@ -75,11 +77,15 @@
     import Error from "../Layout/Error";
     import Alert from "../Layout/Alert";
     import FormInput from "../Layout/Form/FormInput";
+    import SideDetailView from "./SideDetailView";
 
     export default {
         name: "PasswordsPage",
 
-        components: {FormInput, Alert, Error, ConfirmationModal, Modal, DangerButton, PrimaryButton},
+        components: {
+            SideDetailView,
+            FormInput, Alert, Error, ConfirmationModal, Modal, DangerButton, PrimaryButton
+        },
 
         mixins: [user],
 
@@ -91,7 +97,9 @@
 
                 deleting: null,
 
-                search: ''
+                search: '',
+
+                detail: null
             }
         },
 
@@ -213,6 +221,10 @@
                 else {
                     this.error = 'Something went wrong. Please contact our support.';
                 }
+            },
+
+            showDetails(password) {
+                this.detail = password;
             }
         }
     }
