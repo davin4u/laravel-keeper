@@ -55,22 +55,17 @@ class ProjectsController extends Controller
         }
 
         if ($project = $this->projects->create($this->request->all())) {
-            return response()->json([
-                'success' => true,
-                'user' => new UserResource(Auth::user())
-            ], Response::HTTP_OK);
+            return $this->success();
         }
 
-        return response()->json([
-            'error' => 'Something went wrong. Please contact our support'
-        ], Response::HTTP_BAD_REQUEST);
+        return $this->error();
     }
 
     /**
-     * @param Project $project
+     * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Project $project)
+    public function update($id)
     {
         if ($this->validator->fails()) {
             return response()->json([
@@ -78,27 +73,25 @@ class ProjectsController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $project->update($this->request->all());
+        if ($this->projects->update((int)$id, $this->request->all())) {
+            return $this->success();
+        }
 
-        return response()->json([
-            'success' => true,
-            'user' => new UserResource(Auth::user())
-        ], Response::HTTP_OK);
+        return $this->notFound();
     }
 
     /**
-     * @param Project $project
+     * @param $id
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function delete(Project $project)
+    public function delete($id)
     {
-        $project->delete();
+        if ($this->projects->delete((int)$id)) {
+            return $this->success();
+        }
 
-        return response()->json([
-            'success' => true,
-            'user' => new UserResource(Auth::user())
-        ], Response::HTTP_OK);
+        return $this->notFound();
     }
 
     /**

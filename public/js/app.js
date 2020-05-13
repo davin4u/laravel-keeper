@@ -23565,7 +23565,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "p-2 w-1/4" },
+                { staticClass: "p-2 w-1/4 text-right" },
                 [
                   _c(
                     "PrimaryButton",

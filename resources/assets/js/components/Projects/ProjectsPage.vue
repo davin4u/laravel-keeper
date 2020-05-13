@@ -16,7 +16,7 @@
                     <a class="text-gray-600" :href="project.url">{{ project.url }}</a>
                 </div>
 
-                <div class="p-2 w-1/4">
+                <div class="p-2 w-1/4 text-right">
                     <PrimaryButton @click.native.prevent="edit(project)" size="sm">edit</PrimaryButton>
 
                     <DangerButton @click.native.prevent="deleteProject(project)" size="sm">delete</DangerButton>

@@ -49,12 +49,16 @@ class PasswordsController extends Controller
     }
 
     /**
-     * @param Password $password
-     * @return PasswordResource
+     * @param $id
+     * @return PasswordResource|\Illuminate\Http\JsonResponse
      */
-    public function show(Password $password)
+    public function show($id)
     {
-        return new PasswordResource($password);
+        if ($password = $this->passwords->getById((int)$id)) {
+            return new PasswordResource($password);
+        }
+
+        return $this->notFound();
     }
 
     /**
@@ -69,22 +73,17 @@ class PasswordsController extends Controller
         }
 
         if ($password = $this->passwords->create($this->request->all())) {
-            return response()->json([
-                'success' => true,
-                'user' => new UserResource(Auth::user())
-            ], Response::HTTP_OK);
+            return $this->success();
         }
 
-        return response()->json([
-            'error' => 'Something went wrong. Please contact our support'
-        ], Response::HTTP_BAD_REQUEST);
+        return $this->error();
     }
 
     /**
-     * @param Password $password
+     * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Password $password)
+    public function update($id)
     {
         if ($this->validator->fails()) {
             return response()->json([
@@ -92,27 +91,25 @@ class PasswordsController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        $password->update($this->request->all());
+        if ($this->passwords->update((int)$id, $this->request->all())) {
+            return $this->success();
+        }
 
-        return response()->json([
-            'success' => true,
-            'user' => new UserResource(Auth::user())
-        ], Response::HTTP_OK);
+        return $this->notFound();
     }
 
     /**
-     * @param Password $password
+     * @param $id
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function delete(Password $password)
+    public function delete($id)
     {
-        $password->delete();
+        if ($this->passwords->delete((int)$id)) {
+            return $this->success();
+        }
 
-        return response()->json([
-            'success' => true,
-            'user' => new UserResource(Auth::user())
-        ], Response::HTTP_OK);
+        return $this->notFound();
     }
 
     /**

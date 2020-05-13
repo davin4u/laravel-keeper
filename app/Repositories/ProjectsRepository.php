@@ -18,16 +18,32 @@ class ProjectsRepository
      */
     public function create(array $data)
     {
-        $data['user_id'] = Auth::user()->id;
-
         try {
-            $project = Project::create($data);
+            $project = Project::create(array_merge($data, [
+                'user_id' => Auth::user()->id
+            ]));
         }
         catch (\Exception $e) {
             return null;
         }
 
         return $project;
+    }
+
+    /**
+     * @param $id
+     * @param $data
+     * @return bool
+     */
+    public function update(int $id, array $data)
+    {
+        if ($project = $this->getById($id)) {
+            $project->update($data);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -42,7 +58,7 @@ class ProjectsRepository
      * @param $id
      * @return Project|null
      */
-    public function getById($id)
+    public function getById(int $id)
     {
         return Project::where('user_id', Auth::user()->id)
                 ->where('id', $id)
@@ -51,12 +67,17 @@ class ProjectsRepository
 
     /**
      * @param $id
-     * @return mixed
+     * @return bool
+     * @throws \Exception
      */
-    public function delete($id)
+    public function delete(int $id)
     {
-        return Project::where('user_id', Auth::user()->id)
-                ->where('id', $id)
-                ->delete();
+        if ($project = $this->getById($id)) {
+            $project->delete();
+
+            return true;
+        }
+
+        return false;
     }
 }

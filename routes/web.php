@@ -33,15 +33,15 @@ Route::middleware(['auth', 'permissions'])->group(function() {
 
     //Projects
     Route::post('/projects/store', 'ProjectsController@store')->name('projects.store');
-    Route::post('/projects/{project}/update', 'ProjectsController@update')->name('projects.update');
-    Route::post('/projects/{project}/delete', 'ProjectsController@delete')->name('projects.delete');
+    Route::post('/projects/{id}/update', 'ProjectsController@update')->name('projects.update');
+    Route::post('/projects/{id}/delete', 'ProjectsController@delete')->name('projects.delete');
 
     //Passwords
     Route::post('/passwords/store', 'PasswordsController@store')->name('passwords.store');
-    Route::post('/passwords/{password}/update', 'PasswordsController@update')->name('passwords.update');
-    Route::post('/passwords/{password}/delete', 'PasswordsController@delete')->name('passwords.delete');
+    Route::post('/passwords/{id}/update', 'PasswordsController@update')->name('passwords.update');
+    Route::post('/passwords/{id}/delete', 'PasswordsController@delete')->name('passwords.delete');
 
-    Route::get('/passwords/{password}', 'PasswordsController@show')->name('passwords.show');
+    Route::get('/passwords/{id}', 'PasswordsController@show')->name('passwords.show');
 
 
     //Settings
