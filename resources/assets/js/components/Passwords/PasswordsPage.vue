@@ -7,7 +7,6 @@
                 <FormInput
                         v-model="search"
                         :type="'text'"
-                        :name="'search'"
                         :placeholder="'Search for a password'"
                         :icon="'SearchGlassIcon'"
                 ></FormInput>

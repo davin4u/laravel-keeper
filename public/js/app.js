@@ -2230,7 +2230,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -23565,7 +23564,6 @@ var render = function() {
                 _c("FormInput", {
                   attrs: {
                     type: "text",
-                    name: "search",
                     placeholder: "Search for a password",
                     icon: "SearchGlassIcon"
                   },
