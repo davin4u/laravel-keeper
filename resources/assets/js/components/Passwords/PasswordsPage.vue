@@ -2,13 +2,14 @@
     <div>
         <Error v-if="error">{{ error }}</Error>
 
-        <div class="mb-2 p-2 bg-gray-100 flex">
+        <div v-if="havePasswords || search.length > 0" class="mb-2 p-2 bg-gray-100 flex">
             <div class="w-1/2">
                 <FormInput
                         v-model="search"
                         :type="'text'"
                         :name="'search'"
                         :placeholder="'Search for a password'"
+                        :icon="'SearchGlassIcon'"
                 ></FormInput>
             </div>
 
@@ -72,7 +73,6 @@
     import PrimaryButton from "../Layout/Buttons/PrimaryButton";
     import DangerButton from "../Layout/Buttons/DangerButton";
     import {user} from "../../mixins/user";
-    import Modal from "../Layout/Modal/Modal";
     import ConfirmationModal from "../Layout/Modal/ConfirmationModal";
     import Error from "../Layout/Error";
     import Alert from "../Layout/Alert";
@@ -84,7 +84,12 @@
 
         components: {
             SideDetailView,
-            FormInput, Alert, Error, ConfirmationModal, Modal, DangerButton, PrimaryButton
+            FormInput,
+            Alert,
+            Error,
+            ConfirmationModal,
+            DangerButton,
+            PrimaryButton
         },
 
         mixins: [user],
@@ -138,9 +143,9 @@
                 return passwords.filter((password) => {
                     if (!_.isNull(this.selectedPasswordGroup)) {
                         if (
-                            !_.isUndefined(password.group)
-                            && !_.isNull(password.group)
-                            && password.group.id !== this.selectedPasswordGroup
+                            _.isUndefined(password.group)
+                            || _.isNull(password.group)
+                            || (password.group.id !== this.selectedPasswordGroup)
                         ) {
                             return false;
                         }

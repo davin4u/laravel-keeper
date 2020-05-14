@@ -1,10 +1,12 @@
 <template>
     <div>
-        <div class="relative">
+        <div v-if="label" class="mb-1 w-full text-gray-700 font-bold">{{ label }}</div>
+
+        <div class="relative w-full">
             <select
-                    class="w-full border p-2 border-gray-200 bg-white appearance-none rounded-none outline-none"
+                    class="w-full border p-2 bg-white appearance-none rounded-none outline-none"
                     :class="{
-                        'border-gray-200': !error,
+                        'border-gray-400': !error,
                         'border-red-600': error
                     }"
                     :name="name"
@@ -55,6 +57,10 @@
                 default: 0
             },
             error: {
+                type: String,
+                default: ''
+            },
+            label: {
                 type: String,
                 default: ''
             }

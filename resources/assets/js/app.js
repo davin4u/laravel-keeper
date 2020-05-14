@@ -10,6 +10,7 @@ import RegisterForm from "./components/Auth/RegisterForm";
 
 import { routex } from './mixins/routex';
 import { http } from "./mixins/http";
+import { icons } from "./mixins/icons";
 
 import VueTippy from "vue-tippy";
 
@@ -18,6 +19,7 @@ Vue.use(VueTippy);
 
 Vue.mixin(routex);
 Vue.mixin(http);
+Vue.mixin(icons);
 
 window.Events = new Vue();
 

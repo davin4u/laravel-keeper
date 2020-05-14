@@ -5,19 +5,21 @@
         <Loading v-if="loading"></Loading>
 
         <form role="form" method="POST" :action="route('passwords.store')">
-            <div class="flex">
+            <div class="flex mb-4">
                 <FormSelect v-model="form.project_id"
                             :name="'project_id'"
                             :placeholder="'Project'"
+                            :label="'Select a project'"
                             :options="projects"
-                            class="w-1/2 mr-1 mb-2"
+                            class="w-1/2 mr-1"
                 ></FormSelect>
 
                 <FormSelect v-model="form.group_id"
                             :name="'group_id'"
                             :placeholder="'Password group'"
+                            :label="'Select a password group'"
                             :options="groups"
-                            class="w-1/2 ml-1 mb-2"
+                            class="w-1/2 ml-1"
                 ></FormSelect>
             </div>
 
@@ -25,25 +27,29 @@
                        :name="'name'"
                        :type="'text'"
                        :placeholder="'Password name'"
+                       :label="'Password name'"
                        :error="form.errors.name"
-                       class="mb-2"
+                       class="mb-4"
             ></FormInput>
 
-            <FormInput v-model="form.username"
-                       :name="'username'"
-                       :type="'text'"
-                       :placeholder="'Username'"
-                       :error="form.errors.username"
-                       class="mb-2"
-            ></FormInput>
+            <div class="flex w-full mb-4">
+                <FormInput v-model="form.username"
+                           :name="'username'"
+                           :type="'text'"
+                           :placeholder="'Username'"
+                           :label="'Username/Login'"
+                           :error="form.errors.username"
+                           class="w-1/2 mr-1"
+                ></FormInput>
 
-            <FormInput v-model="form.password"
-                       :name="'password'"
-                       :type="'password'"
-                       :placeholder="'Password'"
-                       :error="form.errors.password"
-                       class="mb-2"
-            ></FormInput>
+                <PasswordInput v-model="form.password"
+                           :name="'password'"
+                           :placeholder="'Password'"
+                           :label="'Password'"
+                           :error="form.errors.password"
+                           class="w-1/2 ml-1"
+                ></PasswordInput>
+            </div>
 
             <FormTextArea v-model="form.full_description"
                           :name="'full_description'"
@@ -51,7 +57,7 @@
                           :error="form.errors.full_description"
             ></FormTextArea>
 
-            <div>
+            <div class="mt-4">
                 <PrimaryButton @click.native.prevent="update">Save</PrimaryButton>
 
                 <DangerButton @click.native.prevent="cancel">Cancel</DangerButton>
@@ -69,11 +75,12 @@
     import PrimaryButton from "../Layout/Buttons/PrimaryButton";
     import {user} from "../../mixins/user";
     import DangerButton from "../Layout/Buttons/DangerButton";
+    import PasswordInput from "../Layout/Form/PasswordInput";
 
     export default {
         name: "EditPasswordPage",
 
-        components: {DangerButton, PrimaryButton, FormTextArea, FormInput, FormSelect, Loading, Error},
+        components: {PasswordInput, DangerButton, PrimaryButton, FormTextArea, FormInput, FormSelect, Loading, Error},
 
         mixins: [user],
 

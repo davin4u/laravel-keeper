@@ -1,9 +1,11 @@
 <template>
-    <div class="mb-2">
+    <div>
+        <div v-if="label" class="mb-1 w-full text-gray-700 font-bold">{{ label }}</div>
+
         <textarea
                 class="w-full h-40 border p-2 outline-none"
                 :class="{
-                    'border-gray-200': !error,
+                    'border-gray-400': !error,
                     'border-red-600': error
                 }"
                 :name="name"
@@ -35,6 +37,10 @@
                 default: ''
             },
             error: {
+                type: String,
+                default: ''
+            },
+            label: {
                 type: String,
                 default: ''
             }
