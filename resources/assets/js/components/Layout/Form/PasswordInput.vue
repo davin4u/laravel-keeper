@@ -3,11 +3,16 @@
         <div v-if="label" class="mb-1 w-full text-gray-700 font-bold">{{ label }}</div>
 
         <div class="relative">
+            <div v-if="withIcon" class="absolute left-0 top-0 h-full flex text-gray-500 ml-2">
+                <component :is="iconComponent" class="w-5 h-5 self-center"></component>
+            </div>
+
             <input
                     class="w-full border p-2 outline-none"
                     :class="{
                         'border-gray-400': !error,
-                        'border-red-600': error
+                        'border-red-600': error,
+                        'pl-10': withIcon
                     }"
                     :name="name"
                     :type="type"
@@ -65,6 +70,9 @@
             label: {
                 type: String,
                 default: ''
+            },
+            icon: {
+                default: null
             }
         },
 
@@ -72,7 +80,9 @@
             return {
                 inputValue: '',
 
-                show: false
+                show: false,
+
+                iconComponent: null
             }
         },
 
@@ -85,11 +95,19 @@
         methods: {
             toggleShow() {
                 this.show = !this.show;
+            },
+
+            withIcon() {
+                return this.icon && this.iconComponent;
             }
         },
 
         mounted() {
             this.inputValue = this.value;
+
+            if (this.icon) {
+                this.iconComponent = this.getIconComponent(this.icon);
+            }
         },
 
         watch: {

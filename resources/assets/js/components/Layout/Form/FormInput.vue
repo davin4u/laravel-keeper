@@ -4,7 +4,7 @@
 
         <div class="relative">
             <div v-if="withIcon" class="absolute left-0 top-0 h-full flex text-gray-500 ml-2">
-                <component :is="iconComponent" class="w-6 h-6 self-center"></component>
+                <component :is="iconComponent" class="w-5 h-5 self-center"></component>
             </div>
 
             <input
