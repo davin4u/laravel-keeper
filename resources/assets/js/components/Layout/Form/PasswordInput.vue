@@ -89,16 +89,16 @@
         computed: {
             type() {
                 return this.show ? 'text' : 'password';
+            },
+
+            withIcon() {
+                return this.icon && this.iconComponent;
             }
         },
 
         methods: {
             toggleShow() {
                 this.show = !this.show;
-            },
-
-            withIcon() {
-                return this.icon && this.iconComponent;
             }
         },
 

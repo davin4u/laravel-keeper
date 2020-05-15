@@ -5,13 +5,17 @@
                 <div v-for="item in menuItems" class="mb-2">
                     <a
                             @click.prevent="changeScreen(item.screen)"
-                            class="block p-1 underline-no border-l-4 hover:border-blue-800"
+                            class="flex w-full p-1 underline-no border-l-4 hover:border-blue-800"
                             :class="{
                                 'border-white': !isCurrentPage(item),
                                 'border-blue-800': isCurrentPage(item)
                             }"
                             href="javascript:void(0)"
-                    >{{ item.name }}</a>
+                    >
+                        <component v-if="item.icon" :is="getIconComponent(item.icon)" class="self-center w-4 h-4 text-gray-600"></component>
+
+                        <span class="ml-1 self-center">{{ item.name }}</span>
+                    </a>
                 </div>
             </div>
 

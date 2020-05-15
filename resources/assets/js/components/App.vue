@@ -32,9 +32,9 @@
             // set side menu items
             let data = {
                 sideMenuItems: [
-                    {name: 'Dashboard', screen: 'dashboard'},
-                    {name: 'Projects', screen: 'projects'},
-                    {name: 'Passwords', screen: 'passwords'}
+                    {name: 'Dashboard', screen: 'dashboard', icon: 'DashboardIcon'},
+                    {name: 'Projects', screen: 'projects', icon: 'ProjectsIcon'},
+                    {name: 'Passwords', screen: 'passwords', icon: 'LockerClosedIcon'}
                 ]
             };
 
@@ -46,7 +46,8 @@
 
                     data.sideMenuItems.push({
                         name: passwordGroup.name,
-                        screen: 'passwords#password-group:' + passwordGroup.id
+                        screen: 'passwords#password-group:' + passwordGroup.id,
+                        icon: passwordGroup.icon || 'FolderIcon'
                     });
                 }
             }

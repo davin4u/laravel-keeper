@@ -40,6 +40,7 @@
                            :placeholder="'Username'"
                            :label="'Username/Login'"
                            :error="form.errors.username"
+                           :icon="'UserIcon'"
                            class="w-1/2 mr-1"
                 ></FormInput>
 
@@ -50,6 +51,7 @@
                            :placeholder="'Password'"
                            :label="'Password'"
                            :error="form.errors.password"
+                           :icon="'LockerClosedIcon'"
                            class="w-1/2 ml-1"
                 ></PasswordInput>
             </div>

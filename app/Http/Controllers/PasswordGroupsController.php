@@ -36,7 +36,12 @@ class PasswordGroupsController extends Controller
      */
     public function store()
     {
-        if ($group = $this->passwordGroups->create(['name' => $this->request->get('name')])) {
+        $group = $this->passwordGroups->create([
+            'name' => $this->request->get('name'),
+            'icon' => $this->request->get('icon')
+        ]);
+
+        if ($group) {
             return response()->json([
                 'success' => true,
                 'group' => $group
