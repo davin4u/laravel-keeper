@@ -30,6 +30,7 @@ Route::middleware(['auth', 'permissions'])->group(function() {
 
     // Password groups
     Route::post('/password-groups/store', 'PasswordGroupsController@store')->name('password_groups.store');
+    Route::post('/password-groups/{id}/update', 'PasswordGroupsController@update')->name('password_groups.update');
 
     //Projects
     Route::post('/projects/store', 'ProjectsController@store')->name('projects.store');

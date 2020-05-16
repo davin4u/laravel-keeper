@@ -80933,3 +80933,11 @@ video {
 .app-full-height {
   min-height: calc(100vh - 80px);
 }
+
+.group-item .edit-group-btn {
+  display: none;
+}
+
+.group-item:hover .edit-group-btn {
+  display: block;
+}

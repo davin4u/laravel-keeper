@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\PasswordGroup;
 use App\Repositories\PasswordGroupsRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PasswordGroupsController extends Controller
 {
@@ -42,10 +40,25 @@ class PasswordGroupsController extends Controller
         ]);
 
         if ($group) {
-            return response()->json([
-                'success' => true,
-                'group' => $group
-            ]);
+            return $this->success();
+        }
+
+        return $this->error();
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update($id)
+    {
+        $data = [
+            'name' => $this->request->get('name'),
+            'icon' => $this->request->get('icon')
+        ];
+
+        if ($this->passwordGroups->update((int)$id, $data)) {
+            return $this->success();
         }
 
         return $this->error();
