@@ -63,4 +63,14 @@ class PasswordGroupsController extends Controller
 
         return $this->error();
     }
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function delete($id)
+    {
+        return $this->passwordGroups->delete((int)$id) ? $this->success() : $this->error();
+    }
 }

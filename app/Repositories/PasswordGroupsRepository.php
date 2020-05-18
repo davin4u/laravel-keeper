@@ -43,6 +43,22 @@ class PasswordGroupsRepository
 
     /**
      * @param int $id
+     * @return bool
+     * @throws \Exception
+     */
+    public function delete(int $id)
+    {
+        if ($group = $this->findById($id)) {
+            $group->delete();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param int $id
      * @return PasswordGroup|null
      */
     public function findById(int $id)

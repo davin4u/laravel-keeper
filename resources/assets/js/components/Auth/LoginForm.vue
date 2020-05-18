@@ -28,7 +28,7 @@
                             <PrimaryButton @click.native.prevent="login">Log in</PrimaryButton>
 
                             <div class="flex text-gray-500 mt-2 text-xs justify-between">
-                                <a class="hover:underline" :href="route('auth.restore_password')">Lost your password?</a>
+                                <a class="hover:underline" href="javascript:void(0)">Lost your password?</a>
 
                                 <span>|</span>
 

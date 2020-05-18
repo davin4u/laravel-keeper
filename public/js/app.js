@@ -129,7 +129,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     // set current screen
-    this.$store.commit('changeScreen', 'dashboard');
+    this.$store.commit('changeScreen', 'passwords');
   }
 });
 
@@ -330,6 +330,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Icons_CogIcon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Icons/CogIcon */ "./resources/assets/js/components/Icons/CogIcon.vue");
 /* harmony import */ var _mixins_user__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../mixins/user */ "./resources/assets/js/mixins/user.js");
 /* harmony import */ var _PasswordGroups_InlineGroupEdit__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PasswordGroups/InlineGroupEdit */ "./resources/assets/js/components/PasswordGroups/InlineGroupEdit.vue");
+/* harmony import */ var _Icons_TrashIcon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Icons/TrashIcon */ "./resources/assets/js/components/Icons/TrashIcon.vue");
+/* harmony import */ var _Layout_Modal_ConfirmationModal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Layout/Modal/ConfirmationModal */ "./resources/assets/js/components/Layout/Modal/ConfirmationModal.vue");
 //
 //
 //
@@ -380,6 +382,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 
@@ -389,6 +414,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "AppSideMenu",
   components: {
+    ConfirmationModal: _Layout_Modal_ConfirmationModal__WEBPACK_IMPORTED_MODULE_7__["default"],
+    TrashIcon: _Icons_TrashIcon__WEBPACK_IMPORTED_MODULE_6__["default"],
     InlineGroupEdit: _PasswordGroups_InlineGroupEdit__WEBPACK_IMPORTED_MODULE_5__["default"],
     CogIcon: _Icons_CogIcon__WEBPACK_IMPORTED_MODULE_3__["default"],
     CreateNewGroupInlineComponent: _PasswordGroups_CreateNewGroupInlineComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -398,7 +425,8 @@ __webpack_require__.r(__webpack_exports__);
   mixins: [_mixins_user__WEBPACK_IMPORTED_MODULE_4__["user"]],
   data: function data() {
     return {
-      editing: null
+      editing: null,
+      deleting: null
     };
   },
   methods: {
@@ -420,24 +448,42 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return item.id === this.editing.id;
+    },
+    deleteGroup: function deleteGroup(item) {
+      this.deleting = item;
+    },
+    confirmDeleteGroup: function confirmDeleteGroup() {
+      var _this = this;
+
+      this.http().post(this.route('password_groups.delete', {
+        id: this.deleting.id
+      })).then(function (response) {
+        if (_this.deleting.screen === _this.$store.state.screen) {
+          _this.$store.commit('changeScreen', 'passwords');
+        }
+
+        _this.deleting = null;
+
+        if (!_.isUndefined(response) && response.success === true) {
+          _this.$store.commit('setUser', response.user);
+        }
+      })["catch"](function () {
+        _this.deleting = null;
+      });
     }
   },
   computed: {
     menuItems: function menuItems() {
-      // set side menu items
       var data = {
-        sideMenuItems: [{
-          name: 'Dashboard',
-          screen: 'dashboard',
-          icon: 'DashboardIcon'
+        sideMenuItems: [//{name: 'Dashboard', screen: 'dashboard', icon: 'DashboardIcon'},
+        {
+          name: 'Passwords',
+          screen: 'passwords',
+          icon: 'LockerClosedIcon'
         }, {
           name: 'Projects',
           screen: 'projects',
           icon: 'ProjectsIcon'
-        }, {
-          name: 'Passwords',
-          screen: 'passwords',
-          icon: 'LockerClosedIcon'
         }]
       };
       var userGroups = this.user().getPasswordGroups();
@@ -455,7 +501,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
 
-      return data.sideMenuItems; //return this.$store.state.pageData.sideMenuItems || [];
+      return data.sideMenuItems;
     }
   }
 });
@@ -1086,6 +1132,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "ShowIcon"
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Icons/TrashIcon.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/Icons/TrashIcon.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "TrashIcon"
 });
 
 /***/ }),
@@ -1934,6 +2001,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -2032,6 +2101,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layout_Form_FormTextArea__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Layout/Form/FormTextArea */ "./resources/assets/js/components/Layout/Form/FormTextArea.vue");
 /* harmony import */ var _mixins_user__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../mixins/user */ "./resources/assets/js/mixins/user.js");
 /* harmony import */ var _Layout_Form_PasswordInput__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Layout/Form/PasswordInput */ "./resources/assets/js/components/Layout/Form/PasswordInput.vue");
+/* harmony import */ var _Layout_Buttons_DangerButton__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Layout/Buttons/DangerButton */ "./resources/assets/js/components/Layout/Buttons/DangerButton.vue");
 //
 //
 //
@@ -2103,6 +2173,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 
 
 
@@ -2114,6 +2186,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CreatePasswordPage",
   components: {
+    DangerButton: _Layout_Buttons_DangerButton__WEBPACK_IMPORTED_MODULE_8__["default"],
     PasswordInput: _Layout_Form_PasswordInput__WEBPACK_IMPORTED_MODULE_7__["default"],
     FormTextArea: _Layout_Form_FormTextArea__WEBPACK_IMPORTED_MODULE_5__["default"],
     FormSelect: _Layout_Form_FormSelect__WEBPACK_IMPORTED_MODULE_4__["default"],
@@ -2196,6 +2269,9 @@ __webpack_require__.r(__webpack_exports__);
         _this.loading = false;
         _this.error = 'Something went wrong. Please contact our support.';
       });
+    },
+    cancel: function cancel() {
+      this.$store.commit('changeScreen', 'passwords');
     },
     processResponse: function processResponse(response) {
       this.processErrors(response.errors || {});
@@ -2765,6 +2841,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layout_PanelHeader__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Layout/PanelHeader */ "./resources/assets/js/components/Layout/PanelHeader.vue");
 /* harmony import */ var _Icons_CloseIcon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Icons/CloseIcon */ "./resources/assets/js/components/Icons/CloseIcon.vue");
 /* harmony import */ var _SideDetailLine__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SideDetailLine */ "./resources/assets/js/components/Passwords/SideDetailLine.vue");
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -21600,7 +21682,7 @@ var render = function() {
             _c("LogoIcon", { staticClass: "w-10 h-10" }),
             _vm._v(" "),
             _c("span", { staticClass: "text-gray-600 ml-2 self-center" }, [
-              _vm._v("Laravel passwords keeper")
+              _vm._v("Laravel passwords manager")
             ])
           ],
           1
@@ -21737,6 +21819,28 @@ var render = function() {
                               [_c("CogIcon", { staticClass: "w-4 h-4" })],
                               1
                             )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.isGroupEditable(item)
+                          ? _c(
+                              "button",
+                              {
+                                directives: [
+                                  { name: "tippy", rawName: "v-tippy" }
+                                ],
+                                staticClass:
+                                  "edit-group-btn self-center p-1 text-gray-500 hover:text-red-800 focus:outline-none",
+                                attrs: { content: "Delete group" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.deleteGroup(item)
+                                  }
+                                }
+                              },
+                              [_c("TrashIcon", { staticClass: "w-4 h-4" })],
+                              1
+                            )
                           : _vm._e()
                       ])
                 ])
@@ -21749,7 +21853,39 @@ var render = function() {
               { staticClass: "w-full mt-2" },
               [_c("CreateNewGroupInlineComponent")],
               1
-            )
+            ),
+            _vm._v(" "),
+            _vm.deleting
+              ? _c(
+                  "ConfirmationModal",
+                  {
+                    on: {
+                      confirm: _vm.confirmDeleteGroup,
+                      cancel: function($event) {
+                        _vm.deleting = null
+                      }
+                    }
+                  },
+                  [
+                    _c("p", { staticClass: "text-xl text-red-600" }, [
+                      _vm._v("WARNING")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("You are going to delete the group")]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _c("span", { staticClass: "text-red-600" }, [
+                        _vm._v("ALL")
+                      ]),
+                      _vm._v(
+                        " passwords attached to this group will be removed as well."
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("Are you sure?")])
+                  ]
+                )
+              : _vm._e()
           ]
         },
         proxy: true
@@ -21875,9 +22011,7 @@ var render = function() {
                                   "a",
                                   {
                                     staticClass: "hover:underline",
-                                    attrs: {
-                                      href: _vm.route("auth.restore_password")
-                                    }
+                                    attrs: { href: "javascript:void(0)" }
                                   },
                                   [_vm._v("Lost your password?")]
                                 ),
@@ -22752,6 +22886,44 @@ var render = function() {
         attrs: {
           d:
             "M.2 10a11 11 0 0 1 19.6 0A11 11 0 0 1 .2 10zm9.8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"
+        }
+      })
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Icons/TrashIcon.vue?vue&type=template&id=6ec3d7d6&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/assets/js/components/Icons/TrashIcon.vue?vue&type=template&id=6ec3d7d6& ***!
+  \*************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "svg",
+    {
+      staticClass: "inline fill-current",
+      attrs: { viewBox: "0 0 20 20", xmlns: "http://www.w3.org/2000/svg" }
+    },
+    [
+      _c("path", {
+        attrs: {
+          d:
+            "M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z"
         }
       })
     ]
@@ -23839,31 +24011,38 @@ var render = function() {
       ),
       _vm._v(" "),
       _c(
-        "PrimaryButton",
-        {
-          attrs: { size: "sm" },
-          nativeOn: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.save($event)
-            }
-          }
-        },
-        [_vm._v("Save")]
-      ),
-      _vm._v(" "),
-      _c(
-        "DangerButton",
-        {
-          attrs: { size: "sm" },
-          nativeOn: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.cancel($event)
-            }
-          }
-        },
-        [_vm._v("Cancel")]
+        "div",
+        { staticClass: "text-center" },
+        [
+          _c(
+            "PrimaryButton",
+            {
+              attrs: { size: "sm" },
+              nativeOn: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.save($event)
+                }
+              }
+            },
+            [_vm._v("Save")]
+          ),
+          _vm._v(" "),
+          _c(
+            "DangerButton",
+            {
+              attrs: { size: "sm" },
+              nativeOn: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.cancel($event)
+                }
+              }
+            },
+            [_vm._v("Cancel")]
+          )
+        ],
+        1
       ),
       _vm._v(" "),
       _vm.showIconSelector
@@ -24055,6 +24234,19 @@ var render = function() {
                   }
                 },
                 [_vm._v("Create")]
+              ),
+              _vm._v(" "),
+              _c(
+                "DangerButton",
+                {
+                  nativeOn: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.cancel($event)
+                    }
+                  }
+                },
+                [_vm._v("Cancel")]
               )
             ],
             1
@@ -24592,7 +24784,17 @@ var render = function() {
               label: "Password:",
               value: _vm.password.decrypted_password
             }
-          })
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "w-full mb-2 border-b border-gray-200" }, [
+            _c("div", { staticClass: "text-gray-700 font-bold mb-2" }, [
+              _vm._v("Description:")
+            ]),
+            _vm._v(" "),
+            _c("pre", { staticClass: "text-gray-600 bg-gray-200 p-2" }, [
+              _vm._v(_vm._s(_vm.password.full_description))
+            ])
+          ])
         ],
         1
       ),
@@ -45125,6 +45327,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/assets/js/components/Icons/TrashIcon.vue":
+/*!************************************************************!*\
+  !*** ./resources/assets/js/components/Icons/TrashIcon.vue ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TrashIcon_vue_vue_type_template_id_6ec3d7d6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TrashIcon.vue?vue&type=template&id=6ec3d7d6& */ "./resources/assets/js/components/Icons/TrashIcon.vue?vue&type=template&id=6ec3d7d6&");
+/* harmony import */ var _TrashIcon_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TrashIcon.vue?vue&type=script&lang=js& */ "./resources/assets/js/components/Icons/TrashIcon.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _TrashIcon_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _TrashIcon_vue_vue_type_template_id_6ec3d7d6___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _TrashIcon_vue_vue_type_template_id_6ec3d7d6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/components/Icons/TrashIcon.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Icons/TrashIcon.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************!*\
+  !*** ./resources/assets/js/components/Icons/TrashIcon.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TrashIcon_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./TrashIcon.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Icons/TrashIcon.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TrashIcon_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/Icons/TrashIcon.vue?vue&type=template&id=6ec3d7d6&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/assets/js/components/Icons/TrashIcon.vue?vue&type=template&id=6ec3d7d6& ***!
+  \*******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TrashIcon_vue_vue_type_template_id_6ec3d7d6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./TrashIcon.vue?vue&type=template&id=6ec3d7d6& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/assets/js/components/Icons/TrashIcon.vue?vue&type=template&id=6ec3d7d6&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TrashIcon_vue_vue_type_template_id_6ec3d7d6___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TrashIcon_vue_vue_type_template_id_6ec3d7d6___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/components/Icons/UserIcon.vue":
 /*!***********************************************************!*\
   !*** ./resources/assets/js/components/Icons/UserIcon.vue ***!
@@ -47007,6 +47278,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Icons_FolderIcon__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Icons/FolderIcon */ "./resources/assets/js/components/Icons/FolderIcon.vue");
 /* harmony import */ var _components_Icons_ProjectsIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/Icons/ProjectsIcon */ "./resources/assets/js/components/Icons/ProjectsIcon.vue");
 /* harmony import */ var _components_Icons_CogIcon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/Icons/CogIcon */ "./resources/assets/js/components/Icons/CogIcon.vue");
+/* harmony import */ var _components_Icons_TrashIcon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/Icons/TrashIcon */ "./resources/assets/js/components/Icons/TrashIcon.vue");
+
 
 
 
@@ -47017,7 +47290,7 @@ __webpack_require__.r(__webpack_exports__);
 var icons = {
   data: function data() {
     return {
-      appIconsList: ['SearchGlassIcon', 'UserIcon', 'LockerClosedIcon', 'DashboardIcon', 'FolderIcon', 'ProjectsIcon', 'CogIcon']
+      appIconsList: ['SearchGlassIcon', 'UserIcon', 'LockerClosedIcon', 'DashboardIcon', 'FolderIcon', 'ProjectsIcon', 'CogIcon', 'TrashIcon']
     };
   },
   methods: {
@@ -47043,6 +47316,9 @@ var icons = {
 
         case 'CogIcon':
           return _components_Icons_CogIcon__WEBPACK_IMPORTED_MODULE_6__["default"];
+
+        case 'TrashIcon':
+          return _components_Icons_TrashIcon__WEBPACK_IMPORTED_MODULE_7__["default"];
 
         default:
           return null;
@@ -47134,6 +47410,7 @@ var routes = {
   //password groups
   'password_groups.store': '/password-groups/store',
   'password_groups.update': '/password-groups/{id}/update',
+  'password_groups.delete': '/password-groups/{id}/delete',
   //projects
   'projects.store': '/projects/store',
   'projects.delete': '/projects/{id}/delete',

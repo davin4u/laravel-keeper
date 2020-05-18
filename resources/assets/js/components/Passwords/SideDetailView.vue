@@ -16,6 +16,12 @@
             <SideDetailLine :label="'Username:'" :value="password.username"></SideDetailLine>
 
             <SideDetailLine :label="'Password:'" :value="password.decrypted_password"></SideDetailLine>
+
+            <div class="w-full mb-2 border-b border-gray-200">
+                <div class="text-gray-700 font-bold mb-2">Description:</div>
+
+                <pre class="text-gray-600 bg-gray-200 p-2">{{ password.full_description }}</pre>
+            </div>
         </div>
 
         <div v-if="project" class="mt-10">

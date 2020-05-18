@@ -47,10 +47,10 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function passwords()
     {
-        return $this->belongsToMany(Password::class);
+        return $this->hasMany(Password::class);
     }
 }

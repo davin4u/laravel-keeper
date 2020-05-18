@@ -25,12 +25,13 @@ Route::post('/login', 'LoginController@login')->name('auth.login');
 
 Auth::routes();
 
-Route::middleware(['auth', 'permissions'])->group(function() {
+Route::middleware(['auth'])->group(function() {
     Route::get('/home', 'HomeController@index')->name('dashboard');
 
     // Password groups
     Route::post('/password-groups/store', 'PasswordGroupsController@store')->name('password_groups.store');
     Route::post('/password-groups/{id}/update', 'PasswordGroupsController@update')->name('password_groups.update');
+    Route::post('/password-groups/{id}/delete', 'PasswordGroupsController@delete')->name('password_groups.delete');
 
     //Projects
     Route::post('/projects/store', 'ProjectsController@store')->name('projects.store');

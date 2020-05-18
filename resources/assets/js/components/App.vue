@@ -27,7 +27,7 @@
 
         mounted() {
             // set current screen
-            this.$store.commit('changeScreen', 'dashboard');
+            this.$store.commit('changeScreen', 'passwords');
         }
     }
 </script>

@@ -3,7 +3,7 @@
         <div class="flex">
             <div class="flex w-1/4">
                 <LogoIcon class="w-10 h-10"></LogoIcon>
-                <span class="text-gray-600 ml-2 self-center">Laravel passwords keeper</span>
+                <span class="text-gray-600 ml-2 self-center">Laravel passwords manager</span>
             </div>
 
             <div class="flex w-3/4 flex-row-reverse">

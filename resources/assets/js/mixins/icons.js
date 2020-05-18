@@ -5,13 +5,14 @@ import DashboardIcon from "../components/Icons/DashboardIcon";
 import FolderIcon from "../components/Icons/FolderIcon";
 import ProjectsIcon from "../components/Icons/ProjectsIcon";
 import CogIcon from "../components/Icons/CogIcon";
+import TrashIcon from "../components/Icons/TrashIcon";
 
 export const icons = {
     data() {
         return {
             appIconsList: [
                 'SearchGlassIcon', 'UserIcon', 'LockerClosedIcon', 'DashboardIcon',
-                'FolderIcon', 'ProjectsIcon', 'CogIcon'
+                'FolderIcon', 'ProjectsIcon', 'CogIcon', 'TrashIcon'
             ]
         }
     },
@@ -39,6 +40,9 @@ export const icons = {
 
                 case 'CogIcon':
                     return CogIcon;
+
+                case 'TrashIcon':
+                    return TrashIcon;
 
                 default:
                     return null;

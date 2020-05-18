@@ -37,6 +37,16 @@
                         >
                             <CogIcon class="w-4 h-4"></CogIcon>
                         </button>
+
+                        <button
+                                v-if="isGroupEditable(item)"
+                                @click.prevent="deleteGroup(item)"
+                                class="edit-group-btn self-center p-1 text-gray-500 hover:text-red-800 focus:outline-none"
+                                content="Delete group"
+                                v-tippy
+                        >
+                            <TrashIcon class="w-4 h-4"></TrashIcon>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -44,6 +54,17 @@
             <div class="w-full mt-2">
                 <CreateNewGroupInlineComponent></CreateNewGroupInlineComponent>
             </div>
+
+            <ConfirmationModal
+                    v-if="deleting"
+                    @confirm="confirmDeleteGroup"
+                    @cancel="deleting = null"
+            >
+                <p class="text-xl text-red-600">WARNING</p>
+                <p>You are going to delete the group</p>
+                <p><span class="text-red-600">ALL</span> passwords attached to this group will be removed as well.</p>
+                <p>Are you sure?</p>
+            </ConfirmationModal>
         </template>
     </Panel>
 </template>
@@ -55,17 +76,22 @@
     import CogIcon from "./Icons/CogIcon";
     import {user} from "../mixins/user";
     import InlineGroupEdit from "./PasswordGroups/InlineGroupEdit";
+    import TrashIcon from "./Icons/TrashIcon";
+    import ConfirmationModal from "./Layout/Modal/ConfirmationModal";
 
     export default {
         name: "AppSideMenu",
 
-        components: {InlineGroupEdit, CogIcon, CreateNewGroupInlineComponent, ButtonLink, Panel},
+        components: {
+            ConfirmationModal,
+            TrashIcon, InlineGroupEdit, CogIcon, CreateNewGroupInlineComponent, ButtonLink, Panel},
 
         mixins: [user],
 
         data() {
             return {
-                editing: null
+                editing: null,
+                deleting: null
             }
         },
 
@@ -92,17 +118,38 @@
                 }
 
                 return item.id === this.editing.id;
+            },
+
+            deleteGroup(item) {
+                this.deleting = item;
+            },
+
+            confirmDeleteGroup() {
+                this.http().post(this.route('password_groups.delete', {id: this.deleting.id}))
+                    .then((response) => {
+                        if (this.deleting.screen === this.$store.state.screen) {
+                            this.$store.commit('changeScreen', 'passwords');
+                        }
+
+                        this.deleting = null;
+
+                        if (!_.isUndefined(response) && response.success === true) {
+                            this.$store.commit('setUser', response.user);
+                        }
+                    })
+                    .catch(() => {
+                        this.deleting = null;
+                    });
             }
         },
 
         computed: {
             menuItems() {
-                // set side menu items
                 let data = {
                     sideMenuItems: [
-                        {name: 'Dashboard', screen: 'dashboard', icon: 'DashboardIcon'},
-                        {name: 'Projects', screen: 'projects', icon: 'ProjectsIcon'},
-                        {name: 'Passwords', screen: 'passwords', icon: 'LockerClosedIcon'}
+                        //{name: 'Dashboard', screen: 'dashboard', icon: 'DashboardIcon'},
+                        {name: 'Passwords', screen: 'passwords', icon: 'LockerClosedIcon'},
+                        {name: 'Projects', screen: 'projects', icon: 'ProjectsIcon'}
                     ]
                 };
 

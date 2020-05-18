@@ -15,7 +15,7 @@ class PasswordObserver
      */
     public function created(Password $password)
     {
-        Auth::user()->passwords()->attach($password->id);
+        //
     }
 
     /**
@@ -37,7 +37,7 @@ class PasswordObserver
      */
     public function deleted(Password $password)
     {
-        Auth::user()->detach($password->id);
+        //
     }
 
     /**

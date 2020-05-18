@@ -6,6 +6,7 @@ export const routes = {
     //password groups
     'password_groups.store': '/password-groups/store',
     'password_groups.update': '/password-groups/{id}/update',
+    'password_groups.delete': '/password-groups/{id}/delete',
 
     //projects
     'projects.store': '/projects/store',

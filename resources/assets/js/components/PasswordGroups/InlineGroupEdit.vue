@@ -14,8 +14,10 @@
             ></FormInput>
         </div>
 
-        <PrimaryButton @click.native.prevent="save" size="sm">Save</PrimaryButton>
-        <DangerButton @click.native.prevent="cancel" size="sm">Cancel</DangerButton>
+        <div class="text-center">
+            <PrimaryButton @click.native.prevent="save" size="sm">Save</PrimaryButton>
+            <DangerButton @click.native.prevent="cancel" size="sm">Cancel</DangerButton>
+        </div>
 
         <IconSelector
                 :current="iconPreference"

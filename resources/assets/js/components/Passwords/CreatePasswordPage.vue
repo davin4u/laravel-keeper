@@ -64,6 +64,7 @@
 
             <div class="mt-4">
                 <PrimaryButton @click.native.prevent="create">Create</PrimaryButton>
+                <DangerButton @click.native.prevent="cancel">Cancel</DangerButton>
             </div>
         </form>
     </div>
@@ -78,11 +79,12 @@
     import FormTextArea from "../Layout/Form/FormTextArea";
     import {user} from "../../mixins/user";
     import PasswordInput from "../Layout/Form/PasswordInput";
+    import DangerButton from "../Layout/Buttons/DangerButton";
 
     export default {
         name: "CreatePasswordPage",
 
-        components: {PasswordInput, FormTextArea, FormSelect, PrimaryButton, FormInput, Loading, Error},
+        components: {DangerButton, PasswordInput, FormTextArea, FormSelect, PrimaryButton, FormInput, Loading, Error},
 
         mixins: [user],
 
@@ -170,6 +172,10 @@
 
                         this.error = 'Something went wrong. Please contact our support.';
                     });
+            },
+
+            cancel() {
+                this.$store.commit('changeScreen', 'passwords');
             },
 
             processResponse(response) {
