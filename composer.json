@@ -5,16 +5,17 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=7.1",
-        "doctrine/dbal": "^2.5",
-        "laravel/framework": "6.*",
-        "laravel/tinker": "~1.0",
-        "nesbot/carbon": "^2.0"
+        "php": ">=7.3",
+        "doctrine/dbal": "^2.6",
+        "laravel/framework": "8.*",
+        "laravel/tinker": "^2.0",
+        "laravel/ui": "^3.2",
+        "nesbot/carbon": "^2.31"
     },
     "require-dev": {
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.7"
+        "fzaninotto/faker": "^1.9",
+        "mockery/mockery": "^1.4.2",
+        "phpunit/phpunit": "^8.5.8"
     },
     "autoload": {
         "classmap": [
